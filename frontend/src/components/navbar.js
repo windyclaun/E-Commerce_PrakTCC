@@ -33,7 +33,7 @@ function NavbarContent() {
 
   return (
     <nav
-      className="navbar has-background-link-dark has-text-white"
+      className="navbar is-fixed-top has-background-link-dark has-text-white"
       role="navigation"
       aria-label="main navigation"
     >
@@ -114,11 +114,16 @@ function NavbarContent() {
 class Navbar extends Component {
   render() {
     return (
-      <header>
-        <NavbarContent />
-      </header>
+      <>
+        <header>
+          <NavbarContent />
+        </header>
+        {/* Spacer agar konten di bawah tidak tertutup navbar */}
+        <div style={{ marginTop: "4rem"}}></div>
+      </>
     );
   }
 }
+
 
 export default Navbar;
