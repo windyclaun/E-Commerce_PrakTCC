@@ -56,7 +56,10 @@ class Product extends BasePage {
           <h2 className="title has-text-link-dark has-text-centered">
             🌊 Daftar Produk
           </h2>
-          <div className="columns is-multiline is-mobile">
+          <div
+            className="columns is-multiline is-mobile"
+            style={{ marginLeft: -10, marginRight: -10 }}
+          >
             {products.length === 0 && (
               <div className="column is-12 has-text-centered has-text-grey">
                 Tidak ada produk.
@@ -65,28 +68,83 @@ class Product extends BasePage {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="column is-3-desktop is-4-tablet is-6-mobile"
+                className="column is-one-quarter-desktop is-one-third-tablet is-half-mobile"
+                style={{ marginBottom: 32 }}
               >
-                <div className="card">
-                  <div className="card-image has-text-centered">
-                    <figure className="image is-128x128 is-inline-block">
+                <div
+                  className="card"
+                  style={{
+                    border: "none",
+                    borderRadius: 16,
+                    boxShadow: "0 4px 16px 0 rgba(122,178,211,0.10)",
+                    transition: "transform 0.2s",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    className="card-image has-text-centered"
+                    style={{ background: "var(--secondary-bg)", padding: 24 }}
+                  >
+                    <figure
+                      className="image is-128x128 is-inline-block"
+                      style={{ margin: 0 }}
+                    >
                       <img
                         src={product.image_url || "/logo192.png"}
                         alt={product.name}
-                        style={{ objectFit: "cover" }}
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: 12,
+                          boxShadow: "0 2px 8px 0 rgba(74,98,138,0.08)",
+                        }}
                       />
                     </figure>
                   </div>
-                  <div className="card-content">
-                    <p className="title is-5">{product.name}</p>
-                    <p className="subtitle is-6 has-text-link">
+                  <div className="card-content" style={{ padding: 12 }}>
+                    <p
+                      className="title is-5"
+                      style={{
+                        color: "var(--primary)",
+                        fontWeight: 600,
+                        marginBottom: 2,
+                        fontSize: 13,
+                      }}
+                    >
+                      {product.name}
+                    </p>
+                    <p
+                      className="subtitle is-6"
+                      style={{
+                        color: "var(--accent)",
+                        fontWeight: 500,
+                        marginBottom: 6,
+                        fontSize: 12,
+                      }}
+                    >
                       Rp {product.price?.toLocaleString("id-ID")}
                     </p>
-                    <p className="has-text-grey">{product.description}</p>
+                    <p
+                      className="has-text-grey"
+                      style={{ fontSize: 11, minHeight: 24 }}
+                    >
+                      {product.description}
+                    </p>
                   </div>
-                  <footer className="card-footer">
+                  <footer
+                    className="card-footer"
+                    style={{
+                      background: "var(--primary-bg)",
+                      borderTop: "none",
+                    }}
+                  >
                     <button
                       className="card-footer-item button is-link is-light"
+                      style={{
+                        borderRadius: 0,
+                        borderBottomLeftRadius: 16,
+                        borderBottomRightRadius: 16,
+                        fontWeight: 600,
+                      }}
                       onClick={() => this.handleAddToCart(product)}
                     >
                       Tambah ke Keranjang

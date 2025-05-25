@@ -70,72 +70,21 @@ class Dashboard extends BasePage {
     // Render untuk admin
     if (role === "admin") {
       return this.renderContainer(
-        <section className="section">
+        <section
+          className="section"
+        >
           <div className="box" style={{ maxWidth: 900, margin: "0 auto" }}>
-            <h2 className="title has-text-centered has-text-link-dark mb-5">
+            <h2
+              className="title has-text-centered mb-5"
+              style={{ color: "var(--primary)" }}
+            >
               Dashboard Admin
             </h2>
-            <h3 className="subtitle has-text-link mb-4">Tambah Produk Baru</h3>
+            <h3 className="subtitle mb-4" style={{ color: "var(--accent)" }}>
+              Tambah Produk Baru
+            </h3>
             <ProductForm onSuccess={this.handleProductAdded} />
             <hr />
-            
-          </div>
-        </section>
-      );
-    }
-    // Render untuk customer
-    if (role === "customer") {
-      return this.renderContainer(
-        <section className="section">
-          <div className="box" style={{ maxWidth: 900, margin: "0 auto" }}>
-            <h2 className="title has-text-centered has-text-link-dark mb-5">
-              Dashboard Customer
-            </h2>
-            <h3 className="subtitle has-text-link mb-4">Daftar Produk</h3>
-            {loading ? (
-              <div className="has-text-centered">Memuat produk...</div>
-            ) : error ? (
-              <div className="notification is-danger is-light">{error}</div>
-            ) : (
-              <table className="table is-fullwidth is-striped">
-                <thead>
-                  <tr>
-                    <th>Nama</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                    <th>Gambar</th>
-                    <th>Deskripsi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((p) => (
-                    <tr key={p.id}>
-                      <td>{p.name}</td>
-                      <td>Rp {p.price?.toLocaleString("id-ID")}</td>
-                      <td>{p.stock}</td>
-                      <td>
-                        {p.image_url && (
-                          <img
-                            src={p.image_url}
-                            alt={p.name}
-                            style={{
-                              width: 48,
-                              height: 48,
-                              objectFit: "cover",
-                            }}
-                          />
-                        )}
-                      </td>
-                      <td>{p.description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-            <div className="mt-5">
-              <h4 className="subtitle is-6 has-text-link">Keranjang Belanja</h4>
-              <this.props.cartComponent />
-            </div>
           </div>
         </section>
       );
@@ -144,10 +93,13 @@ class Dashboard extends BasePage {
     return this.renderContainer(
       <section className="section">
         <div className="box" style={{ maxWidth: 900, margin: "0 auto" }}>
-          <h2 className="title has-text-centered has-text-link-dark mb-5">
+          <h2
+            className="title has-text-centered mb-5"
+            style={{ color: "var(--primary)" }}
+          >
             Dashboard
           </h2>
-          <p className="has-text-centered">
+          <p className="has-text-centered" style={{ color: "var(--accent)" }}>
             Selamat datang, Anda berhasil login!
           </p>
         </div>

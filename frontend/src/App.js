@@ -9,13 +9,14 @@ import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import Cart from "./components/cart";
 import CartPage from "./pages/cartPage";
+import "./custom.css"; // Importing custom CSS
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="app-container">
         <Navbar />
-        <main>
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />

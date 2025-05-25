@@ -8,19 +8,28 @@ class Home extends BasePage {
     if (error) return <div className="notification is-danger">{error}</div>;
     return (
       <section
-        className="section has-background-link-dark has-text-white"
+        className="section"
         style={{ minHeight: "100vh", width: "100vw", margin: 0, padding: 0 }}
       >
         <div className="container is-fluid" style={{ width: "100%" }}>
-          <h1 className="title has-text-white has-text-centered">
+          <h1
+            className="title has-text-centered"
+            style={{ color: "var(--primary)" }}
+          >
             🌊 Selamat Datang di MyStore!
           </h1>
-          <p className="subtitle has-text-white has-text-centered">
+          <p
+            className="subtitle has-text-centered"
+            style={{ color: "var(--accent)" }}
+          >
             Temukan produk terbaik untuk kebutuhan Anda dengan mudah dan cepat.
           </p>
           <div className="columns is-multiline">
             {featured.length === 0 && (
-              <div className="column is-12 has-text-centered has-text-grey-light">
+              <div
+                className="column is-12 has-text-centered"
+                style={{ color: "var(--primary)" }}
+              >
                 Tidak ada produk unggulan.
               </div>
             )}
@@ -37,8 +46,16 @@ class Home extends BasePage {
                     </figure>
                   </div>
                   <div className="card-content">
-                    <p className="title is-5">{product.name}</p>
-                    <p className="subtitle is-6 has-text-link">
+                    <p
+                      className="title is-5"
+                      style={{ color: "var(--primary)" }}
+                    >
+                      {product.name}
+                    </p>
+                    <p
+                      className="subtitle is-6 has-text-link"
+                      style={{ color: "var(--accent)" }}
+                    >
                       Rp {product.price?.toLocaleString("id-ID")}
                     </p>
                   </div>

@@ -77,7 +77,12 @@ class Login extends BasePage {
           )}
           <form onSubmit={this.handleSubmit} autoComplete="off">
             <div className="field mb-4">
-              <label className="label has-text-weight-semibold">Username</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Username
+              </label>
               <div className="control has-icons-left">
                 <input
                   className="input"
@@ -87,6 +92,7 @@ class Login extends BasePage {
                   onChange={this.handleChange}
                   placeholder="Username"
                   required
+                  style={{ color: "var(--primary)" }}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-user"></i>
@@ -94,7 +100,12 @@ class Login extends BasePage {
               </div>
             </div>
             <div className="field mb-4">
-              <label className="label has-text-weight-semibold">Password</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Password
+              </label>
               <div className="control has-icons-left">
                 <input
                   className="input"
@@ -104,6 +115,7 @@ class Login extends BasePage {
                   onChange={this.handleChange}
                   placeholder="Password"
                   required
+                  style={{ color: "var(--primary)" }}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-lock"></i>

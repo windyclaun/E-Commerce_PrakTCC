@@ -79,7 +79,9 @@ class ProductForm extends React.Component {
           </div>
         )}
         <div className="field mb-3">
-          <label className="label">Nama Produk</label>
+          <label className="label" style={{ color: "var(--primary)" }}>
+            Nama Produk
+          </label>
           <div className="control">
             <input
               className="input"
@@ -87,11 +89,14 @@ class ProductForm extends React.Component {
               value={name}
               onChange={this.handleChange}
               required
+              style={{ color: "var(--primary)" }}
             />
           </div>
         </div>
         <div className="field mb-3">
-          <label className="label">Harga</label>
+          <label className="label" style={{ color: "var(--primary)" }}>
+            Harga
+          </label>
           <div className="control">
             <input
               className="input"
@@ -100,11 +105,14 @@ class ProductForm extends React.Component {
               value={price}
               onChange={this.handleChange}
               required
+              style={{ color: "var(--primary)" }}
             />
           </div>
         </div>
         <div className="field mb-3">
-          <label className="label">Stok</label>
+          <label className="label" style={{ color: "var(--primary)" }}>
+            Stok
+          </label>
           <div className="control">
             <input
               className="input"
@@ -113,28 +121,35 @@ class ProductForm extends React.Component {
               value={stock}
               onChange={this.handleChange}
               required
+              style={{ color: "var(--primary)" }}
             />
           </div>
         </div>
         <div className="field mb-3">
-          <label className="label">URL Gambar</label>
+          <label className="label" style={{ color: "var(--primary)" }}>
+            URL Gambar
+          </label>
           <div className="control">
             <input
               className="input"
               name="image_url"
               value={image_url}
               onChange={this.handleChange}
+              style={{ color: "var(--primary)" }}
             />
           </div>
         </div>
         <div className="field mb-3">
-          <label className="label">Deskripsi</label>
+          <label className="label" style={{ color: "var(--primary)" }}>
+            Deskripsi
+          </label>
           <div className="control">
             <textarea
               className="textarea"
               name="description"
               value={description}
               onChange={this.handleChange}
+              style={{ color: "var(--primary)" }}
             />
           </div>
         </div>
@@ -144,6 +159,11 @@ class ProductForm extends React.Component {
               loading ? " is-loading" : ""
             }`}
             disabled={loading}
+            style={{
+              background: "var(--accent)",
+              color: "var(--white)",
+              fontWeight: 600,
+            }}
           >
             Tambah Produk
           </button>

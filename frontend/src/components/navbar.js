@@ -1,6 +1,6 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Cart from "./cart";
+import CartIcon from "./cartIcon";
 
 // Komponen Link aktif Bulma
 function NavLink({ to, children }) {
@@ -19,7 +19,6 @@ function NavLink({ to, children }) {
 
 function NavbarContent() {
   const navigate = useNavigate();
-  const [showCart, setShowCart] = useState(false);
   const token = localStorage.getItem("token");
   let isLoggedIn = Boolean(token);
   let role = null;
@@ -33,7 +32,7 @@ function NavbarContent() {
 
   return (
     <nav
-      className="navbar is-fixed-top has-background-link-dark has-text-white"
+      className="navbar has-background-link-dark has-text-white is-fixed-top"
       role="navigation"
       aria-label="main navigation"
     >
@@ -77,7 +76,7 @@ function NavbarContent() {
                 className="button is-link is-light is-small"
                 onClick={() => navigate("/cart")}
               >
-                Keranjang
+                <CartIcon />
               </button>
             </div>
           )}
@@ -89,7 +88,7 @@ function NavbarContent() {
                   navigate("/login");
                   window.location.reload();
                 }}
-                className="button is-link is-light is-small"
+                className="button is-link is-danger is-small"
               >
                 Logout
               </button>
@@ -118,12 +117,11 @@ class Navbar extends Component {
         <header>
           <NavbarContent />
         </header>
-        {/* Spacer agar konten di bawah tidak tertutup navbar */}
-        <div style={{ marginTop: "4rem"}}></div>
+        {/* Spacer agar konten tidak tenggelam di bawah navbar fixed-top */}
+        <div style={{ marginTop: "3.5rem" }}></div>
       </>
     );
   }
 }
-
 
 export default Navbar;

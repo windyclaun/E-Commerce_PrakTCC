@@ -65,7 +65,12 @@ class Register extends BasePage {
           )}
           <form onSubmit={this.handleSubmit} autoComplete="off">
             <div className="field mb-4">
-              <label className="label has-text-weight-semibold">Username</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Username
+              </label>
               <div className="control has-icons-left">
                 <input
                   className="input"
@@ -75,6 +80,7 @@ class Register extends BasePage {
                   onChange={this.handleChange}
                   placeholder="Username"
                   required
+                  style={{ color: "var(--primary)" }}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-user"></i>
@@ -82,7 +88,12 @@ class Register extends BasePage {
               </div>
             </div>
             <div className="field mb-4">
-              <label className="label has-text-weight-semibold">Password</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Password
+              </label>
               <div className="control has-icons-left">
                 <input
                   className="input"
@@ -92,6 +103,7 @@ class Register extends BasePage {
                   onChange={this.handleChange}
                   placeholder="Password"
                   required
+                  style={{ color: "var(--primary)" }}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-lock"></i>
@@ -99,7 +111,12 @@ class Register extends BasePage {
               </div>
             </div>
             <div className="field mb-4">
-              <label className="label has-text-weight-semibold">Email</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Email
+              </label>
               <div className="control has-icons-left">
                 <input
                   className="input"
@@ -109,6 +126,7 @@ class Register extends BasePage {
                   onChange={this.handleChange}
                   placeholder="Email"
                   required
+                  style={{ color: "var(--primary)" }}
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-envelope"></i>
@@ -116,9 +134,14 @@ class Register extends BasePage {
               </div>
             </div>
             <div className="field mb-5">
-              <label className="label has-text-weight-semibold">Role</label>
+              <label
+                className="label has-text-weight-semibold"
+                style={{ color: "var(--primary)" }}
+              >
+                Role
+              </label>
               <div className="control">
-                <label className="radio">
+                <label className="radio" style={{ color: "var(--primary)" }}>
                   <input
                     type="radio"
                     name="role"
@@ -128,7 +151,10 @@ class Register extends BasePage {
                   />
                   &nbsp;Customer
                 </label>
-                <label className="radio" style={{ marginLeft: 16 }}>
+                <label
+                  className="radio"
+                  style={{ marginLeft: 16, color: "var(--primary)" }}
+                >
                   <input
                     type="radio"
                     name="role"
