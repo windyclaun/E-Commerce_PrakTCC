@@ -1,4 +1,4 @@
-const Order = require('../models/OrderModel');
+const Order = require("../models/OrderModel");
 
 exports.getAll = async (req, res) => {
   const [orders] = await Order.getAllOrders();
@@ -16,7 +16,7 @@ exports.create = async (req, res) => {
   const user_id = req.user.id; // ambil dari token
   try {
     await Order.createOrder(user_id, product_id, quantity, total_price);
-    res.status(201).json({ message: 'Order created' });
+    res.status(201).json({ message: "Order created" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -27,7 +27,7 @@ exports.update = async (req, res) => {
   const { quantity, total_price } = req.body;
   try {
     await Order.updateOrder(id, quantity, total_price);
-    res.json({ message: 'Order updated' });
+    res.json({ message: "Order updated" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -37,7 +37,17 @@ exports.delete = async (req, res) => {
   const { id } = req.params;
   try {
     await Order.deleteOrder(id);
-    res.json({ message: 'Order deleted' });
+    res.json({ message: "Order deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const [orders] = await Order.getOrdersByUserId(userId);
+    res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

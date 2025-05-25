@@ -1,16 +1,26 @@
 import React from "react";
 import BasePage from "./BasePage";
 import Loading from "../components/loading";
+import axios from "axios";
 
 class Product extends BasePage {
   state = {
     products: [],
     loading: true,
     error: null,
+    role: null,
   };
 
   async componentDidMount() {
-    this.setState({ loading: true });
+    let role = null;
+    try {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        role = payload.role;
+      }
+    } catch {}
+    this.setState({ loading: true, role });
     try {
       const res = await fetch("/api/products");
       const products = await res.json();
@@ -46,8 +56,35 @@ class Product extends BasePage {
     }
   };
 
+  handleDeleteProduct = async (productId) => {
+    if (!window.confirm("Yakin ingin menghapus produk ini?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`/api/products/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      this.setState((prev) => ({
+        products: prev.products.filter((p) => p.id !== productId),
+      }));
+    } catch (err) {
+      let msg = "Gagal menghapus produk";
+      if (err.response && err.response.data && err.response.data.error) {
+        if (
+          err.response.data.error.includes("a foreign key constraint fails") ||
+          err.response.data.error.includes(
+            "Cannot delete or update a parent row"
+          )
+        ) {
+          msg =
+            "Tidak dapat menghapus produk karena masih ada order/transaksi yang menggunakan produk ini.";
+        }
+      }
+      alert(msg);
+    }
+  };
+
   render() {
-    const { products = [], loading, error } = this.state;
+    const { products = [], loading, error, role } = this.state;
     if (loading) return <Loading />;
     if (error) return <div className="notification is-danger">{error}</div>;
     return this.renderContainer(
@@ -137,18 +174,33 @@ class Product extends BasePage {
                       borderTop: "none",
                     }}
                   >
-                    <button
-                      className="card-footer-item button is-link is-light"
-                      style={{
-                        borderRadius: 0,
-                        borderBottomLeftRadius: 16,
-                        borderBottomRightRadius: 16,
-                        fontWeight: 600,
-                      }}
-                      onClick={() => this.handleAddToCart(product)}
-                    >
-                      Tambah ke Keranjang
-                    </button>
+                    {role === "admin" ? (
+                      <button
+                        className="card-footer-item button is-danger is-light"
+                        style={{
+                          borderRadius: 0,
+                          borderBottomLeftRadius: 16,
+                          borderBottomRightRadius: 16,
+                          fontWeight: 600,
+                        }}
+                        onClick={() => this.handleDeleteProduct(product.id)}
+                      >
+                        Hapus Produk
+                      </button>
+                    ) : (
+                      <button
+                        className="card-footer-item button is-link is-light"
+                        style={{
+                          borderRadius: 0,
+                          borderBottomLeftRadius: 16,
+                          borderBottomRightRadius: 16,
+                          fontWeight: 600,
+                        }}
+                        onClick={() => this.handleAddToCart(product)}
+                      >
+                        Tambah ke Keranjang
+                      </button>
+                    )}
                   </footer>
                 </div>
               </div>
