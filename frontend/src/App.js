@@ -12,6 +12,30 @@ import CartPage from "./pages/cartPage";
 import "./custom.css"; // Importing custom CSS
 
 function App() {
+  React.useEffect(() => {
+    // Set judul sesuai halaman aktif
+    const handleTitle = () => {
+      const path = window.location.pathname;
+      let title = "MyStore";
+      if (path === "/") title = "Beranda | MyStore";
+      else if (path === "/login") title = "Login | MyStore";
+      else if (path === "/register") title = "Register | MyStore";
+      else if (path === "/products") title = "Produk | MyStore";
+      else if (path === "/dashboard") title = "Dashboard | MyStore";
+      else if (path === "/cart") title = "Keranjang | MyStore";
+      document.title = title;
+    };
+    handleTitle();
+    window.addEventListener("popstate", handleTitle);
+    // Tambahkan event listener untuk react-router navigation
+    const observer = new MutationObserver(handleTitle);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      window.removeEventListener("popstate", handleTitle);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <Router>
       <div className="app-container">
