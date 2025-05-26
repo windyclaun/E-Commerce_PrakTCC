@@ -12,12 +12,14 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname); // Mengambil ekstensi file
-    cb(null, Date.now() + ext); // Menyimpan file dengan nama unik berdasarkan timestamp
+    cb(null, Date.now() + ext);
   }
 });
 const upload = multer({ storage });
 
 // Menambahkan middleware untuk upload gambar
 router.post('/', verifyToken, upload.single('image'), controller.create);
+
+router.get('/', controller.getAll);
 
 module.exports = router;

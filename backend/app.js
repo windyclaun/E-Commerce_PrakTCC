@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path'); // Pastikan untuk mengimpor path
+
 const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -8,7 +10,10 @@ dotenv.config();
 
 // Middleware
 app.use(cors());
-app.use(express.json()); // parsing body JSON
+app.use(express.json()); // Parsing body JSON
+
+// Menyajikan folder 'uploads' sebagai folder statis
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Import Routes
 const userRoutes = require('./routes/UserRoutes');
