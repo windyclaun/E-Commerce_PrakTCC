@@ -25,3 +25,21 @@ exports.getUserById = async (id) => {
   );
   return rows;
 };
+
+// UPDATE USER
+exports.updateUser = (id, username, password, email, role) => {
+  return db.execute(
+    'UPDATE users SET username = ?, password = ?, email = ?, role = ? WHERE id = ?',
+    [username, password, email, role, id]
+  );
+};
+
+// DELETE USER
+exports.deleteUser = (id) => {
+  return db.execute('DELETE FROM users WHERE id = ?', [id]);
+};
+
+// DELETE ALL ORDERS BY USER ID
+exports.deleteOrdersByUserId = (userId) => {
+  return db.execute('DELETE FROM orders WHERE user_id = ?', [userId]);
+};

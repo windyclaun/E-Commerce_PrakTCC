@@ -53,3 +53,47 @@ exports.getUser = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// EDIT USER
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { username, password, email, role } = req.body;
+  let hashedPassword = password;
+
+  if (password) {
+    // Jika password diubah, hash password baru
+    hashedPassword = await bcrypt.hash(password, 10);
+  }
+
+  try {
+    // Update user di database
+    const result = await User.updateUser(id, username, hashedPassword, email, role);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User updated successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+// DELETE USER (Dengan Menghapus Orders Terkait)
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Hapus orders yang terkait dengan user terlebih dahulu
+    await User.deleteOrdersByUserId(id);  // Tambahkan fungsi ini di UserModel
+
+    // Setelah itu, hapus user dari database
+    const result = await User.deleteUser(id);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "User and related orders deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
