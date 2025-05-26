@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 24, 2025 at 05:53 AM
+-- Generation Time: May 26, 2025 at 01:43 PM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,7 +42,8 @@ CREATE TABLE `orders` (
 
 INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total_price`, `created_at`) VALUES
 (1, 11, 1, 1, 11111.00, '2025-05-22 19:35:09'),
-(2, 12, 1, 1, 11111.00, '2025-05-22 20:20:13');
+(2, 12, 1, 1, 11111.00, '2025-05-22 20:20:13'),
+(4, 13, 3, 1, 1000.00, '2025-05-26 09:31:01');
 
 -- --------------------------------------------------------
 
@@ -56,15 +57,24 @@ CREATE TABLE `products` (
   `price` decimal(10,2) DEFAULT NULL,
   `stock` int(11) DEFAULT NULL,
   `image_url` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL
+  `description` text DEFAULT NULL,
+  `category` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `price`, `stock`, `image_url`, `description`) VALUES
-(1, 'sepeda', 11111.00, 2, 'Unknown column \'description\' in \'field list\'', 'sepeda shiva');
+INSERT INTO `products` (`id`, `name`, `price`, `stock`, `image_url`, `description`, `category`) VALUES
+(1, 'sepeda', 11111.00, 2, 'Unknown column \'description\' in \'field list\'', 'sepeda shiva', NULL),
+(2, 'LAPTOP ASUS VIVOBOOK FLIP 14', 99999999.99, 1, 'https://sl.bing.net/ePvuVRMaZsy', 'ini laptop', NULL),
+(3, 'Bagas', 1000.00, 1, 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-icon-logo-png-transparent-svg-vector-bie-supply-14.png', 'kntl', NULL),
+(4, 'Baju Jamet', 50000.00, 1, 'https://i0.wp.com/ecs7.tokopedia.net/img/cache/700/product-1/2020/1/21/474559841/474559841_628e7e49-ec3e-4f49-8544-0ec9827ed1cb_576_576.jpg', 'ini baju jamet ges', 'fashion'),
+(5, 'love', 99999999.99, 4, '/uploads/1748255689263.jpeg', 'cinta', 'health'),
+(6, 'mobil', 99999999.99, 1, '/uploads/1748255760982.jpeg', 'ndasdawdawda', 'electronics'),
+(7, 'mobil', 99999999.99, 1, '/uploads/1748256129654.jpeg', 'qweqew', 'electronics'),
+(8, 'mobil', 99999999.99, 2, '/uploads/1748256258820.jpeg', 'adasd', 'health'),
+(9, 'mobil', 88888.00, 23, '/uploads/1748256871640.jpeg', 'ini mobil', 'fashion');
 
 -- --------------------------------------------------------
 
@@ -87,7 +97,9 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`) VALUES
 (10, 'bagas', '$2b$10$r/u06bR/5Ni7IdnFDF33NeLUxKkyFq4dBnZFCI.MsPPxDYjQ6lc6C', 'bagas123@gmail.com', 'admin'),
 (11, 'bagas12', '$2b$10$qGfm7iUXVPBo0B3.XX1zyuSXZSEncOnZmJLpRClz7lW.qGSeHGJFm', 'bagas@gmail.com', 'customer'),
-(12, 'udin', '$2b$10$8.kOrhcyz.30fYPuUpuLT.LhPeZmVc8uARV/fdxLWuwgNLY.aZZ0e', 'udin@gmail.com', 'customer');
+(12, 'udin', '$2b$10$8.kOrhcyz.30fYPuUpuLT.LhPeZmVc8uARV/fdxLWuwgNLY.aZZ0e', 'udin@gmail.com', 'customer'),
+(13, 'windy', '$2b$10$eQcB9VJTWo0lY8gGsECmoeu7Y0alzy9c5meR0l1lSEXfolw.XSdIq', 'windynapitupulu3108@gmail.com', 'customer'),
+(14, 'admin', '$2b$10$Qfeuq0j32cYV/dAMCGwT3OcgHbR3906Zc/pRKzdeStvQTGfVRs2lm', 'admin@admin.com', 'admin');
 
 --
 -- Indexes for dumped tables
@@ -122,19 +134,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
