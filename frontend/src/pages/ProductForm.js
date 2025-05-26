@@ -6,7 +6,7 @@ class ProductForm extends React.Component {
     name: "",
     price: "",
     stock: "",
-    image_url: "",
+    image: null,  // Menyimpan gambar yang di-upload
     description: "",
     category: "", // Menambahkan kategori ke state
     loading: false,
@@ -18,36 +18,48 @@ class ProductForm extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  // Mengubah handleChange untuk file input
+  handleFileChange = (e) => {
+    this.setState({ image: e.target.files[0] });
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
     this.setState({ loading: true, error: null, success: null });
+
+    const { name, price, stock, description, category, image } = this.state;
+    const token = localStorage.getItem("token");
+
     try {
-      // Kirim token JWT untuk autentikasi admin
-      const token = localStorage.getItem("token");
-      await axios.post(
-        "/api/products", // Ganti dengan URL API yang sesuai
-        {
-          name: this.state.name,
-          price: this.state.price,
-          stock: this.state.stock,
-          image_url: this.state.image_url,
-          description: this.state.description,
-          category: this.state.category, // Menyertakan kategori dalam request POST
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("stock", stock);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("image", image);  // Menambahkan gambar ke FormData
+
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",  // Mengatur header untuk upload file
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      };
+
+      const response = await axios.post("http://localhost:5000/api/products", formData, config);
+
+
       this.setState({
         name: "",
         price: "",
         stock: "",
-        image_url: "",
         description: "",
-        category: "", // Reset kategori
+        category: "",
+        image: null,  // Reset image setelah upload
         loading: false,
         success: "Produk berhasil ditambahkan!",
       });
+
       if (this.props.onSuccess) this.props.onSuccess();
     } catch (err) {
       this.setState({
@@ -62,13 +74,14 @@ class ProductForm extends React.Component {
       name,
       price,
       stock,
-      image_url,
       description,
       category,
+      image,
       loading,
       error,
       success,
     } = this.state;
+
     return (
       <form onSubmit={this.handleSubmit} autoComplete="off">
         {error && (
@@ -130,20 +143,6 @@ class ProductForm extends React.Component {
         </div>
         <div className="field mb-3">
           <label className="label" style={{ color: "var(--primary)" }}>
-            URL Gambar
-          </label>
-          <div className="control">
-            <input
-              className="input"
-              name="image_url"
-              value={image_url}
-              onChange={this.handleChange}
-              style={{ color: "var(--primary)" }}
-            />
-          </div>
-        </div>
-        <div className="field mb-3">
-          <label className="label" style={{ color: "var(--primary)" }}>
             Deskripsi
           </label>
           <div className="control">
@@ -180,6 +179,22 @@ class ProductForm extends React.Component {
             </select>
           </div>
         </div>
+
+        <div className="field mb-3">
+          <label className="label" style={{ color: "var(--primary)" }}>
+            Gambar Produk (jpg/jpeg)
+          </label>
+          <div className="control">
+            <input
+              type="file"
+              name="image"
+              accept="image/jpeg, image/jpg"
+              onChange={this.handleFileChange}
+              required
+            />
+          </div>
+        </div>
+
         <div className="field mt-4">
           <button
             className={`button is-link is-fullwidth${loading ? " is-loading" : ""}`}

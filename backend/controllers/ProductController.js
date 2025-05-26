@@ -1,4 +1,19 @@
 const Product = require('../models/ProductModel');
+const multer = require('multer');
+const path = require('path');
+
+// Konfigurasi penyimpanan gambar dengan multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');  // Menyimpan gambar di folder 'uploads'
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);  // Mengambil ekstensi file
+    cb(null, Date.now() + ext);  // Menyimpan file dengan nama unik berdasarkan timestamp
+  }
+});
+
+const upload = multer({ storage }); // Menggunakan konfigurasi multer
 
 exports.getAll = async (req, res) => {
   const [products] = await Product.getAllProducts();
@@ -12,9 +27,12 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const { name, price, stock, image_url, description, category } = req.body;
+  const { name, price, stock, description, category } = req.body;
+  const image = req.file ? `/uploads/${req.file.filename}` : ''; // Mendapatkan path gambar yang di-upload
+
   try {
-    await Product.createProduct(name, price, stock, image_url, description, category);
+    // Menyimpan produk ke database dengan path gambar yang di-upload
+    await Product.createProduct(name, price, stock, image, description, category);
     res.status(201).json({ message: 'Product created successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Failed to create product', error });
@@ -23,8 +41,16 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   const { id } = req.params;
-  const { name, price, stock, image_url, description } = req.body;
+  const { name, price, stock, description } = req.body;
+  let image_url = req.body.image_url;
+
+  // Jika ada gambar baru yang di-upload
+  if (req.file) {
+    image_url = `/uploads/${req.file.filename}`; // Mendapatkan path gambar yang di-upload
+  }
+
   try {
+    // Update produk di database dengan gambar yang baru (jika ada)
     await Product.updateProduct(id, name, price, stock, image_url, description);
     res.json({ message: 'Product updated' });
   } catch (err) {

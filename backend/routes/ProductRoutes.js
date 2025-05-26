@@ -2,12 +2,22 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/ProductController');
 const verifyToken = require('../middleware/VerifyToken');
+const multer = require('multer');
+const path = require('path');  // Pastikan path diimpor di sini
 
-// CRUD produk
-router.get('/', controller.getAll);
-router.get('/:id', controller.getById);
-router.post('/', verifyToken, controller.create);
-router.put('/:id', verifyToken, controller.update);
-router.delete('/:id', verifyToken, controller.delete);
+// Konfigurasi multer (menyimpan file gambar)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Menyimpan file gambar di folder 'uploads'
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); // Mengambil ekstensi file
+    cb(null, Date.now() + ext); // Menyimpan file dengan nama unik berdasarkan timestamp
+  }
+});
+const upload = multer({ storage });
+
+// Menambahkan middleware untuk upload gambar
+router.post('/', verifyToken, upload.single('image'), controller.create);
 
 module.exports = router;

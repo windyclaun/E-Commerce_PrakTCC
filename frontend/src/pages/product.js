@@ -9,7 +9,7 @@ class Product extends BasePage {
     loading: true,
     error: null,
     role: null,
-    selectedCategory: "", // Menyimpan kategori yang dipilih untuk filter
+    selectedCategory: "",
     categories: [
       "fashion",
       "electronics",
