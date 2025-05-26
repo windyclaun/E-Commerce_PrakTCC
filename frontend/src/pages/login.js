@@ -136,6 +136,20 @@ class Login extends BasePage {
               </div>
             </div>
           </form>
+          <div className="has-text-centered mt-4">
+            <span className="is-size-7 has-text-grey">
+              Belum memiliki akun?{" "}
+              <a
+                href="/register"
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 600,
+                }}
+              >
+                Silakan register di sini
+              </a>
+            </span>
+          </div>
         </div>
       </section>
     );

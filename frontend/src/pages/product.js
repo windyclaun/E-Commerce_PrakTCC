@@ -40,7 +40,7 @@ class Product extends BasePage {
     }
   }
 
-    handleCategoryChange = (e) => {
+  handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
     this.setState({ selectedCategory }, this.filterProducts); // Panggil fungsi untuk filter produk
   };
@@ -56,7 +56,6 @@ class Product extends BasePage {
       this.setState({ filteredProducts: products });
     }
   };
-
 
   handleAddToCart = async (product) => {
     const token = localStorage.getItem("token");
@@ -91,9 +90,20 @@ class Product extends BasePage {
       await axios.delete(`/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      this.setState((prev) => ({
-        products: prev.products.filter((p) => p.id !== productId),
-      }));
+      // Setelah hapus, refresh produk dari server
+      const res = await fetch("/api/products");
+      const products = await res.json();
+      this.setState({
+        products,
+        filteredProducts: this.state.selectedCategory
+          ? products.filter(
+              (product) => product.category === this.state.selectedCategory
+            )
+          : products,
+      });
+      // Notifikasi sukses
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      this.setState({ error: null });
     } catch (err) {
       let msg = "Gagal menghapus produk";
       if (err.response && err.response.data && err.response.data.error) {
@@ -107,12 +117,19 @@ class Product extends BasePage {
             "Tidak dapat menghapus produk karena masih ada order/transaksi yang menggunakan produk ini.";
         }
       }
-      alert(msg);
+      this.setState({ error: msg });
     }
   };
 
-    render() {
-    const { filteredProducts, loading, error, role, selectedCategory, categories } = this.state;
+  render() {
+    const {
+      filteredProducts,
+      loading,
+      error,
+      role,
+      selectedCategory,
+      categories,
+    } = this.state;
     if (loading) return <Loading />;
     if (error) return <div className="notification is-danger">{error}</div>;
 

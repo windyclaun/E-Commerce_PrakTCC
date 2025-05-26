@@ -60,14 +60,21 @@ exports.updateUser = async (req, res) => {
   const { username, password, email, role } = req.body;
   let hashedPassword = password;
 
-  if (password) {
-    // Jika password diubah, hash password baru
-    hashedPassword = await bcrypt.hash(password, 10);
-  }
-
   try {
+    // Jika password dikirim, hash password baru
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    } else {
+      hashedPassword = null; // Supaya model tahu password tidak diubah
+    }
     // Update user di database
-    const result = await User.updateUser(id, username, hashedPassword, email, role);
+    const result = await User.updateUser(
+      id,
+      username,
+      hashedPassword,
+      email,
+      role
+    );
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -77,14 +84,13 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-
 // DELETE USER (Dengan Menghapus Orders Terkait)
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
     // Hapus orders yang terkait dengan user terlebih dahulu
-    await User.deleteOrdersByUserId(id);  // Tambahkan fungsi ini di UserModel
+    await User.deleteOrdersByUserId(id); // Tambahkan fungsi ini di UserModel
 
     // Setelah itu, hapus user dari database
     const result = await User.deleteUser(id);

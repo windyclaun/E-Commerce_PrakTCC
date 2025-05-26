@@ -1,6 +1,7 @@
 import React from "react";
 import BasePage from "./BasePage";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 class Register extends BasePage {
   state = {
@@ -11,6 +12,7 @@ class Register extends BasePage {
     loading: false,
     error: null,
     success: null,
+    redirect: null,
   };
 
   handleChange = (e) => {
@@ -22,31 +24,50 @@ class Register extends BasePage {
     e.preventDefault();
     this.setState({ loading: true, error: null, success: null });
     try {
-      const res = await axios.post("/api/users/register", {
+      await axios.post("/api/users/register", {
         username: this.state.username,
         password: this.state.password,
         email: this.state.email,
-        role: this.state.role,
+        role: this.state.role, // Kirim role ke backend
       });
-      this.setState({
-        success: res.data.message,
-        loading: false,
-        username: "",
-        password: "",
-        email: "",
-        role: "",
-      });
+      // Animasi fade out sebelum redirect ke login
+      document.body.classList.add("fade-page-exit-active");
+      setTimeout(() => {
+        this.setState({
+          success: "Registrasi berhasil! Silakan login.",
+          loading: false,
+          username: "",
+          password: "",
+          email: "",
+          redirect: "/login",
+        });
+      }, 400);
     } catch (err) {
       this.setState({
-        error: err.response?.data?.error || "Gagal register",
+        error: err.response?.data?.message || "Registrasi gagal",
         loading: false,
       });
     }
   };
 
+  componentWillUnmount() {
+    document.body.classList.remove("fade-page-exit-active");
+  }
+
   render() {
-    const { username, password, email, role, loading, error, success } =
-      this.state;
+    const {
+      username,
+      password,
+      email,
+      loading,
+      error,
+      success,
+      redirect,
+      role,
+    } = this.state;
+    if (redirect) {
+      return <Navigate to={redirect} replace />;
+    }
     return this.renderContainer(
       <section className="section">
         <div className="box" style={{ maxWidth: 420, margin: "0 auto" }}>

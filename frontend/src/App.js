@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import Navbar from "./components/navbar";
 import Footer from "./components/footer";
 import Home from "./pages/home";
@@ -9,7 +14,41 @@ import Register from "./pages/register";
 import Dashboard from "./pages/dashboard";
 import Cart from "./components/cart";
 import CartPage from "./pages/cartPage";
+import UserEdit from "./pages/UserEdit";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./custom.css"; // Importing custom CSS
+import "./fade-page.css"; // Import CSS for page transition effects
+
+function AppRoutes() {
+  const location = useLocation();
+  const pageRef = React.useRef(null);
+
+  return (
+    <TransitionGroup component={null}>
+      <CSSTransition
+        key={location.pathname}
+        classNames="fade-page"
+        timeout={350}
+        nodeRef={pageRef}
+      >
+        <div ref={pageRef} className="page-transition-wrapper">
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/products" element={<Product />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/dashboard"
+              element={<Dashboard cartComponent={Cart} />}
+            />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/user/edit/:userId" element={<UserEdit />} />
+          </Routes>
+        </div>
+      </CSSTransition>
+    </TransitionGroup>
+  );
+}
 
 function App() {
   React.useEffect(() => {
@@ -37,25 +76,13 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="app-container">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/products" element={<Product />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/dashboard"
-              element={<Dashboard cartComponent={Cart} />}
-            />
-            <Route path="/cart" element={<CartPage />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="app-container">
+      <Navbar />
+      <main className="main-content">
+        <AppRoutes />
+      </main>
+      <Footer />
+    </div>
   );
 }
 
