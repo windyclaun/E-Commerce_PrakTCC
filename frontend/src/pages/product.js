@@ -1,14 +1,24 @@
-import React from "react";
-import BasePage from "./BasePage";
-import Loading from "../components/loading";
 import axios from "axios";
+import Loading from "../components/loading";
+import BasePage from "./BasePage";
 
 class Product extends BasePage {
   state = {
     products: [],
+    filteredProducts: [],
     loading: true,
     error: null,
     role: null,
+    selectedCategory: "", // Menyimpan kategori yang dipilih untuk filter
+    categories: [
+      "fashion",
+      "electronics",
+      "furniture",
+      "sports",
+      "beauty",
+      "health",
+      "children",
+    ], // Daftar kategori produk
   };
 
   async componentDidMount() {
@@ -24,11 +34,29 @@ class Product extends BasePage {
     try {
       const res = await fetch("/api/products");
       const products = await res.json();
-      this.setState({ products, loading: false });
+      this.setState({ products, filteredProducts: products, loading: false });
     } catch (err) {
       this.setState({ error: "Gagal memuat produk", loading: false });
     }
   }
+
+    handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+    this.setState({ selectedCategory }, this.filterProducts); // Panggil fungsi untuk filter produk
+  };
+
+  filterProducts = () => {
+    const { selectedCategory, products } = this.state;
+    if (selectedCategory) {
+      const filteredProducts = products.filter(
+        (product) => product.category === selectedCategory
+      );
+      this.setState({ filteredProducts });
+    } else {
+      this.setState({ filteredProducts: products });
+    }
+  };
+
 
   handleAddToCart = async (product) => {
     const token = localStorage.getItem("token");
@@ -83,26 +111,48 @@ class Product extends BasePage {
     }
   };
 
-  render() {
-    const { products = [], loading, error, role } = this.state;
+    render() {
+    const { filteredProducts, loading, error, role, selectedCategory, categories } = this.state;
     if (loading) return <Loading />;
     if (error) return <div className="notification is-danger">{error}</div>;
+
     return this.renderContainer(
       <section className="section">
         <div className="container">
           <h2 className="title has-text-link-dark has-text-centered">
             🌊 Daftar Produk
           </h2>
+
+          {/* Dropdown filter kategori */}
+          <div className="field">
+            <label className="label">Filter Kategori</label>
+            <div className="control">
+              <select
+                className="input"
+                value={selectedCategory}
+                onChange={this.handleCategoryChange}
+              >
+                <option value="">Pilih Kategori</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Tampilkan produk yang sudah difilter */}
           <div
             className="columns is-multiline is-mobile"
             style={{ marginLeft: -10, marginRight: -10 }}
           >
-            {products.length === 0 && (
+            {filteredProducts.length === 0 && (
               <div className="column is-12 has-text-centered has-text-grey">
                 Tidak ada produk.
               </div>
             )}
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <div
                 key={product.id}
                 className="column is-one-quarter-desktop is-one-third-tablet is-half-mobile"

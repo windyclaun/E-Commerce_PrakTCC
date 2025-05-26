@@ -8,10 +8,10 @@ exports.getProductById = (id) => {
   return db.execute('SELECT * FROM products WHERE id = ?', [id]);
 };
 
-exports.createProduct = (name, price, stock, imageUrl, description) => {
+exports.createProduct = (name, price, stock, imageUrl, description, category) => {
   return db.execute(
-    'INSERT INTO products (name, price, stock, image_url, description) VALUES (?, ?, ?, ?, ?)',
-    [name, price, stock, imageUrl, description]
+    'INSERT INTO products (name, price, stock, image_url, description, category) VALUES (?, ?, ?, ?, ?, ?)',
+    [name, price, stock, imageUrl, description, category]
   );
 };
 

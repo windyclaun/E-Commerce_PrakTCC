@@ -1,8 +1,12 @@
 const Order = require("../models/OrderModel");
 
 exports.getAll = async (req, res) => {
-  const [orders] = await Order.getAllOrders();
-  res.json(orders);
+  try {
+    const [orders] = await Order.getAllOrders();
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.getById = async (req, res) => {

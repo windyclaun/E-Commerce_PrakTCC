@@ -12,12 +12,12 @@ exports.getById = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-  const { name, price, stock, image_url, description } = req.body;
+  const { name, price, stock, image_url, description, category } = req.body;
   try {
-    await Product.createProduct(name, price, stock, image_url, description);
-    res.status(201).json({ message: 'Product created' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+    await Product.createProduct(name, price, stock, image_url, description, category);
+    res.status(201).json({ message: 'Product created successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to create product', error });
   }
 };
 

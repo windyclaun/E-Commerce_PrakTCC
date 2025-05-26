@@ -2,9 +2,13 @@ const db = require("../config/Database");
 
 exports.getAllOrders = () => {
   return db.execute(
-    "SELECT o.*, p.name as product_name, p.image_url FROM orders o LEFT JOIN products p ON o.product_id = p.id"
+    `SELECT o.*, p.name AS product_name, p.image_url, u.username AS user_username 
+    FROM orders o
+    LEFT JOIN products p ON o.product_id = p.id
+    LEFT JOIN users u ON o.user_id = u.id` // Menyertakan JOIN ke tabel users untuk mendapatkan username
   );
 };
+
 
 exports.getOrderById = (id) => {
   return db.execute(
