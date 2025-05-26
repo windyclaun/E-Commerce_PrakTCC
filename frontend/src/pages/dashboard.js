@@ -73,32 +73,35 @@ class Dashboard extends BasePage {
     if (role === "admin") {
       return this.renderContainer(
         <section
-          className="section"
+          className="section dashboard-section"
           style={{ background: "var(--primary-bg)", minHeight: "100vh" }}
         >
           <div
-            className="box"
+            className="box dashboard-bg"
             style={{
-              maxWidth: 500,
+              maxWidth: 520,
               margin: "0 auto",
-              borderRadius: 18,
-              boxShadow: "0 4px 24px #7ab2d320",
-              background: "#fff",
+              borderRadius: 22,
+              boxShadow: "0 6px 32px #03030322",
+              background: "var(--white)",
+              border: "2px solid var(--secondary-bg)",
+              padding: 36,
             }}
           >
             <h2
               className="title has-text-centered mb-4"
               style={{
                 color: "var(--primary)",
-                fontWeight: 800,
-                letterSpacing: 1,
+                fontWeight: 900,
+                letterSpacing: 1.5,
+                textShadow: "0 2px 8px #d4c9be55",
               }}
             >
-              Dashboard Admin
+              <span style={{ color: "var(--accent)" }}>Dashboard</span> Admin
             </h2>
             <h3
               className="subtitle mb-4 has-text-centered"
-              style={{ color: "var(--accent)", fontWeight: 600 }}
+              style={{ color: "var(--primary)", fontWeight: 700 }}
             >
               Tambah Produk Baru
             </h3>
@@ -108,7 +111,10 @@ class Dashboard extends BasePage {
                 style={{ fontSize: 15, marginBottom: 18 }}
               >
                 Silakan isi form di bawah untuk menambah produk ke toko Anda.
-                Pastikan data produk sudah benar sebelum disimpan.
+                <br />
+                <span style={{ color: "var(--accent)", fontWeight: 600 }}>
+                  Pastikan data produk sudah benar sebelum disimpan.
+                </span>
               </p>
             </div>
             <div style={{ padding: 0 }}>

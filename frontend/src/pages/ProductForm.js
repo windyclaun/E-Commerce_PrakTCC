@@ -6,7 +6,7 @@ class ProductForm extends React.Component {
     name: "",
     price: "",
     stock: "",
-    image: null,  // Menyimpan gambar yang di-upload
+    image: null, // Menyimpan gambar yang di-upload
     description: "",
     category: "", // Menambahkan kategori ke state
     loading: false,
@@ -37,17 +37,20 @@ class ProductForm extends React.Component {
       formData.append("stock", stock);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("image", image);  // Menambahkan gambar ke FormData
+      formData.append("image", image); // Menambahkan gambar ke FormData
 
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data",  // Mengatur header untuk upload file
+          "Content-Type": "multipart/form-data", // Mengatur header untuk upload file
           Authorization: `Bearer ${token}`,
         },
       };
 
-      const response = await axios.post("http://localhost:5000/api/products", formData, config);
-
+      const response = await axios.post(
+        "http://localhost:5000/api/products",
+        formData,
+        config
+      );
 
       this.setState({
         name: "",
@@ -55,7 +58,7 @@ class ProductForm extends React.Component {
         stock: "",
         description: "",
         category: "",
-        image: null,  // Reset image setelah upload
+        image: null, // Reset image setelah upload
         loading: false,
         success: "Produk berhasil ditambahkan!",
       });
@@ -166,7 +169,12 @@ class ProductForm extends React.Component {
               value={category}
               onChange={this.handleChange}
               required
-              style={{ color: "var(--primary)" }}
+              style={{
+                color: "var(--primary)",
+                background: "#fffbe6", // warna kuning muda cerah dari palette
+                border: "1.5px solid #d4c9be",
+                fontWeight: 600,
+              }}
             >
               <option value="">Pilih Kategori</option>
               <option value="fashion">Fashion</option>
@@ -197,9 +205,15 @@ class ProductForm extends React.Component {
 
         <div className="field mt-4">
           <button
-            className={`button is-link is-fullwidth${loading ? " is-loading" : ""}`}
+            className={`button is-link is-fullwidth${
+              loading ? " is-loading" : ""
+            }`}
             disabled={loading}
-            style={{ background: "var(--accent)", color: "var(--white)", fontWeight: 600 }}
+            style={{
+              background: "var(--accent)",
+              color: "var(--white)",
+              fontWeight: 600,
+            }}
           >
             {loading ? "Memuat..." : "Tambah Produk"}
           </button>
