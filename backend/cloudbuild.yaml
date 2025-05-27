@@ -8,8 +8,8 @@ steps:
       - "-t"
       - "gcr.io/$PROJECT_ID/tcc-be-rest"
       - "-f"
-      - "backend/Dockerfile"  # Tentukan path ke Dockerfile yang benar
-      - "."  # Gunakan direktori konteks yang sesuai
+      - "backend/Dockerfile"  # Tentukan path Dockerfile yang benar
+      - "backend/"  # Tentukan folder konteks yang benar
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/tcc-be-rest"]
