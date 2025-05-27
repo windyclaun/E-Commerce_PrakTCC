@@ -20,6 +20,7 @@ steps:
         "--region",
         "us-central1",
         "--allow-unauthenticated",
+        "--set-env-vars",
         "DB_HOST=${_DB_HOST},
         DB_PORT=${_DB_PORT},
         DB_USER=${_DB_USER},
