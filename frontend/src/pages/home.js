@@ -14,8 +14,12 @@ class Home extends BasePage {
 
   async componentDidMount() {
     try {
-      const res = await axios.get("https://be-rest-1005441798389.us-central1.run.app/api/products");
-      this.setState({ products: res.data, loading: false });
+      const res = await axios.get(
+        "https://be-rest-1005441798389.us-central1.run.app/api/products"
+      );
+      let products = res.data;
+      if (!Array.isArray(products)) products = [];
+      this.setState({ products, loading: false });
       this.carouselTimer = setInterval(() => this.nextCarousel("right"), 3500);
     } catch (err) {
       this.setState({ error: "Gagal memuat produk", loading: false });
@@ -49,7 +53,7 @@ class Home extends BasePage {
   render() {
     const { carouselIndex, products, loading, error, animating, direction } =
       this.state;
-    const featured = products.slice(0, 3);
+    const featured = Array.isArray(products) ? products.slice(0, 3) : [];
     const product = featured[carouselIndex] || {};
     return this.renderContainer(
       <section className="section" style={{ minHeight: "100vh" }}>

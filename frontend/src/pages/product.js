@@ -3,6 +3,8 @@ import Loading from "../components/loading";
 import BasePage from "./BasePage";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = "https://be-rest-1005441798389.us-central1.run.app";
+
 class Product extends BasePage {
   state = {
     products: [],
@@ -33,8 +35,9 @@ class Product extends BasePage {
     } catch {}
     this.setState({ loading: true, role });
     try {
-      const res = await fetch("/api/products");
-      const products = await res.json();
+      const res = await axios.get(`${API_BASE}/api/products`);
+      let products = res.data;
+      if (!Array.isArray(products)) products = [];
       this.setState({ products, filteredProducts: products, loading: false });
     } catch (err) {
       this.setState({ error: "Gagal memuat produk", loading: false });
@@ -48,13 +51,14 @@ class Product extends BasePage {
 
   filterProducts = () => {
     const { selectedCategory, products } = this.state;
+    let safeProducts = Array.isArray(products) ? products : [];
     if (selectedCategory) {
-      const filteredProducts = products.filter(
+      const filteredProducts = safeProducts.filter(
         (product) => product.category === selectedCategory
       );
       this.setState({ filteredProducts });
     } else {
-      this.setState({ filteredProducts: products });
+      this.setState({ filteredProducts: safeProducts });
     }
   };
 
@@ -65,19 +69,17 @@ class Product extends BasePage {
       return;
     }
     try {
-      // Default quantity 1, total_price = product.price
-      await fetch("/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      await axios.post(
+        `${API_BASE}/api/orders`,
+        {
           product_id: product.id,
           quantity: 1,
           total_price: product.price,
-        }),
-      });
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       alert("Produk berhasil dimasukkan ke keranjang!");
     } catch (err) {
       alert("Gagal menambah ke keranjang");
@@ -88,12 +90,13 @@ class Product extends BasePage {
     if (!window.confirm("Yakin ingin menghapus produk ini?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`/api/products/${productId}`, {
+      await axios.delete(`${API_BASE}/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // Setelah hapus, refresh produk dari server
-      const res = await fetch("/api/products");
-      const products = await res.json();
+      const res = await axios.get(`${API_BASE}/api/products`);
+      let products = res.data;
+      if (!Array.isArray(products)) products = [];
       this.setState({
         products,
         filteredProducts: this.state.selectedCategory
@@ -102,7 +105,6 @@ class Product extends BasePage {
             )
           : products,
       });
-      // Notifikasi sukses
       window.scrollTo({ top: 0, behavior: "smooth" });
       this.setState({ error: null });
     } catch (err) {
