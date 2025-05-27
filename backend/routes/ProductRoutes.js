@@ -19,8 +19,9 @@ const upload = multer({ storage });
 
 // Menambahkan middleware untuk upload gambar
 router.post("/", verifyToken, upload.single("image"), controller.create);
-
+router.put("/:id", verifyToken, upload.single("image"), controller.update);
 router.get("/", controller.getAll);
 router.delete("/:id", verifyToken, controller.delete);
 
 module.exports = router;
+

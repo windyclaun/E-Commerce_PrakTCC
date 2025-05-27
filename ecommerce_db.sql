@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 09:40 PM
+-- Generation Time: May 27, 2025 at 06:15 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,17 +33,17 @@ CREATE TABLE `orders` (
   `product_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `status` varchar(50) DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total_price`, `created_at`) VALUES
-(1, 11, 1, 1, 11111.00, '2025-05-22 19:35:09'),
-(2, 12, 1, 1, 11111.00, '2025-05-22 20:20:13'),
-(4, 13, 3, 1, 1000.00, '2025-05-26 09:31:01');
+INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total_price`, `created_at`, `status`) VALUES
+(6, 13, 4, 1, 50000.00, '2025-05-26 19:54:23', 'checked_out'),
+(8, 11, 4, 1, 50000.00, '2025-05-26 19:56:13', 'pending');
 
 -- --------------------------------------------------------
 
@@ -66,13 +66,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `stock`, `image_url`, `description`, `category`) VALUES
-(1, 'sepeda', 11111.00, 2, 'Unknown column \'description\' in \'field list\'', 'sepeda shiva', NULL),
-(2, 'LAPTOP ASUS VIVOBOOK FLIP 14', 99999999.99, 1, 'https://sl.bing.net/ePvuVRMaZsy', 'ini laptop', NULL),
-(3, 'Bagas', 1000.00, 1, 'https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-google-icon-logo-png-transparent-svg-vector-bie-supply-14.png', 'kntl', NULL),
 (4, 'Baju Jamet', 50000.00, 1, 'https://i0.wp.com/ecs7.tokopedia.net/img/cache/700/product-1/2020/1/21/474559841/474559841_628e7e49-ec3e-4f49-8544-0ec9827ed1cb_576_576.jpg', 'ini baju jamet ges', 'fashion'),
 (5, 'love', 99999999.99, 4, '/uploads/1748255689263.jpeg', 'cinta', 'health'),
-(9, 'mobil', 88888.00, 23, '/uploads/1748256871640.jpeg', 'ini mobil', 'fashion'),
-(10, 'windy', 1000.00, 100, '/uploads/1748288038412.jpg', 'lonte', 'children');
+(10, 'windycantik', 99999999.99, 1, '/uploads/1748319291737.jpg', 'ni cewe cantik betul', 'beauty'),
+(11, 'Bagas', 500.00, 1, '/uploads/1748288992160.jpeg', 'LC, lelaki penghibur', 'beauty');
 
 -- --------------------------------------------------------
 
@@ -135,13 +132,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`

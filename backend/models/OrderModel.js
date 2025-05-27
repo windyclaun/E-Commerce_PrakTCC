@@ -41,3 +41,40 @@ exports.getOrdersByUserId = (user_id) => {
     [user_id]
   );
 };
+
+exports.getPendingOrdersByUserId = (userId) => {
+  if (!userId) {
+    throw new Error("User ID is missing");
+  }
+
+  return db.execute(
+    `SELECT * FROM orders WHERE user_id = ? AND status = 'pending'`,
+    [userId]
+  );
+};
+
+
+exports.checkoutAllOrdersByUserId = (userId) => {
+  if (!userId) {
+    throw new Error("User ID is missing");
+  }
+
+  return db.execute(
+    `UPDATE orders SET status = 'checked_out' WHERE user_id = ? AND status = 'pending'`,
+    [userId]
+  );
+};
+
+exports.getOrderByIdAndUserId = (orderId, userId) => {
+  return db.execute(
+    "SELECT * FROM orders WHERE id = ? AND user_id = ?",
+    [orderId, userId]
+  );
+};
+
+exports.checkoutOrderById = (orderId) => {
+  return db.execute(
+    "UPDATE orders SET status = 'checked_out' WHERE id = ?",
+    [orderId]
+  );
+};

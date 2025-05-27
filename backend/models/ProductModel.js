@@ -15,12 +15,13 @@ exports.createProduct = (name, price, stock, imageUrl, description, category) =>
   );
 };
 
-exports.updateProduct = (id, name, price, stock, imageUrl, description) => {
+exports.updateProduct = (id, name, price, stock, imageUrl, description, category) => {
   return db.execute(
-    'UPDATE products SET name = ?, price = ?, stock = ?, image_url = ?, description = ? WHERE id = ?',
-    [name, price, stock, imageUrl, description, id]
+    'UPDATE products SET name = ?, price = ?, stock = ?, image_url = ?, description = ?, category = ? WHERE id = ?',
+    [name, price, stock, imageUrl, description, category, id]
   );
 };
+
 
 exports.deleteProduct = (id) => {
   return db.execute('DELETE FROM products WHERE id = ?', [id]);
