@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 27, 2025 at 06:15 AM
+-- Generation Time: May 27, 2025 at 08:25 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.1.17
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -42,8 +42,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `product_id`, `quantity`, `total_price`, `created_at`, `status`) VALUES
-(6, 13, 4, 1, 50000.00, '2025-05-26 19:54:23', 'checked_out'),
-(8, 11, 4, 1, 50000.00, '2025-05-26 19:56:13', 'pending');
+(6, 13, 4, 1, 50000.00, '2025-05-26 19:54:23', 'checked_out');
 
 -- --------------------------------------------------------
 
@@ -66,9 +65,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `stock`, `image_url`, `description`, `category`) VALUES
-(4, 'Baju Jamet', 50000.00, 1, 'https://i0.wp.com/ecs7.tokopedia.net/img/cache/700/product-1/2020/1/21/474559841/474559841_628e7e49-ec3e-4f49-8544-0ec9827ed1cb_576_576.jpg', 'ini baju jamet ges', 'fashion'),
-(5, 'love', 99999999.99, 4, '/uploads/1748255689263.jpeg', 'cinta', 'health'),
-(10, 'windycantik', 99999999.99, 1, '/uploads/1748319291737.jpg', 'ni cewe cantik betul', 'beauty'),
+(4, 'Baju Jamet', 50000.00, 10, '', 'ini baju jamet ges', 'fashion'),
+(5, 'love', 99999999.99, 4, '/uploads/1748255689263.jpeg', 'mantep', 'health'),
+(10, 'windycantik', 99999999.99, 1, '', 'lonte\nST 100k 1 kali crot 1 jam\nLT 300K bebas crot 24 jam', 'beauty'),
 (11, 'Bagas', 500.00, 1, '/uploads/1748288992160.jpeg', 'LC, lelaki penghibur', 'beauty');
 
 -- --------------------------------------------------------
@@ -91,7 +90,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`) VALUES
 (10, 'eru25', '$2b$10$r/u06bR/5Ni7IdnFDF33NeLUxKkyFq4dBnZFCI.MsPPxDYjQ6lc6C', 'bagas123@gmail.com', 'admin'),
-(11, 'bagas', '$2b$10$qGfm7iUXVPBo0B3.XX1zyuSXZSEncOnZmJLpRClz7lW.qGSeHGJFm', 'bagas@gmail.com', 'customer'),
 (12, 'udin', '$2b$10$8.kOrhcyz.30fYPuUpuLT.LhPeZmVc8uARV/fdxLWuwgNLY.aZZ0e', 'udin@gmail.com', 'customer'),
 (13, 'windy', '$2b$10$eQcB9VJTWo0lY8gGsECmoeu7Y0alzy9c5meR0l1lSEXfolw.XSdIq', 'windynapitupulu3108@gmail.com', 'customer'),
 (15, 'admin', '$2b$10$jIs4OdNgtb/wDsz.n59XBuik/1sB5yJapgsJSqxbl6yoWNrPMmb0K', 'admin@gmail.com', 'admin'),
@@ -132,7 +130,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `products`
