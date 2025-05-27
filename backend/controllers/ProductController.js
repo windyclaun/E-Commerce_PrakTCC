@@ -1,7 +1,7 @@
 const Product = require("../models/ProductModel");
 const { Storage } = require('@google-cloud/storage');
 const storage = new Storage();
-const bucketName = process.env.GCP_BUCKET_NAME;
+const bucketName = "ecommerce-bucket-project";
 const bucket = storage.bucket(bucketName);
 const path = require("path");
 
