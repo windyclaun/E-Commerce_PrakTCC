@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json()); // Parsing body JSON
 
 // Menyajikan folder 'uploads' sebagai folder statis
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Import Routes
 const userRoutes = require('./routes/UserRoutes');
