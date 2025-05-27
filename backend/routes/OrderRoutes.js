@@ -12,6 +12,10 @@ router.delete("/:id", verifyToken, controller.delete);
 router.get("/user/:userId", verifyToken, controller.getByUserId);
 router.put("/checkout", verifyToken, controller.checkoutAll);
 router.put("/checkout/:id", verifyToken, controller.checkoutById);
-
+router.get(
+  "/user/:userId/checkedout",
+  verifyToken,
+  controller.getCheckedOutByUserId
+);
 
 module.exports = router;

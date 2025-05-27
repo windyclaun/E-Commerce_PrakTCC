@@ -211,6 +211,27 @@ function NavbarContent() {
                       padding: 14,
                       fontWeight: 600,
                       fontSize: 15,
+                      color: "var(--primary)",
+                    }}
+                    onClick={() => {
+                      setDropdown(false);
+                      navigate("/checkout-history");
+                    }}
+                  >
+                    <i
+                      className="fas fa-history mr-2"
+                      style={{ marginRight: 8 }}
+                    ></i>{" "}
+                    Riwayat Checkout
+                  </button>
+                  <button
+                    className="dropdown-item button is-white is-fullwidth has-text-left"
+                    style={{
+                      border: "none",
+                      borderRadius: 0,
+                      padding: 14,
+                      fontWeight: 600,
+                      fontSize: 15,
                       color: "#e74c3c",
                     }}
                     onClick={async () => {

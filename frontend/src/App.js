@@ -15,6 +15,9 @@ import Dashboard from "./pages/dashboard";
 import Cart from "./components/cart";
 import CartPage from "./pages/cartPage";
 import UserEdit from "./pages/UserEdit";
+import CheckoutPage from "./pages/checkout";
+import CheckoutHistory from "./pages/checkoutHistory";
+import EditProduct from "./pages/EditProduct";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import "./custom.css"; // Importing custom CSS
 import "./fade-page.css"; // Import CSS for page transition effects
@@ -43,6 +46,9 @@ function AppRoutes() {
             />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/user/edit/:userId" element={<UserEdit />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout-history" element={<CheckoutHistory />} />
+            <Route path="/edit-product/:id" element={<EditProduct />} />
           </Routes>
         </div>
       </CSSTransition>

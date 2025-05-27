@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 class CartPage extends React.Component {
   state = {
@@ -57,6 +58,13 @@ class CartPage extends React.Component {
         ? prev.selectedOrders.filter((id) => id !== orderId)
         : [...prev.selectedOrders, orderId];
       return { selectedOrders: selected };
+    });
+  };
+
+  handleCheckoutClick = () => {
+    const { selectedOrders, orders } = this.state;
+    this.props.navigate("/checkout", {
+      state: { selectedOrders, orders },
     });
   };
 
@@ -156,6 +164,7 @@ class CartPage extends React.Component {
                 <button
                   className="button is-link is-medium"
                   disabled={selectedOrders.length === 0}
+                  onClick={this.handleCheckoutClick}
                 >
                   Checkout
                 </button>
@@ -168,4 +177,9 @@ class CartPage extends React.Component {
   }
 }
 
-export default CartPage;
+function CartPageWithNavigate(props) {
+  const navigate = useNavigate();
+  return <CartPage {...props} navigate={navigate} />;
+}
+
+export default CartPageWithNavigate;

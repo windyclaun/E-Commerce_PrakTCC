@@ -69,14 +69,26 @@ exports.delete = async (req, res) => {
 exports.update = async (req, res) => {
   const { id } = req.params;
   const { name, price, stock, description, category } = req.body;
-  const image = req.file ? `/uploads/${req.file.filename}` : ""; // Mendapatkan path gambar yang di-upload (jika ada)
-
+  let image;
+  if (req.file) {
+    image = `/uploads/${req.file.filename}`;
+  } else {
+    // Ambil image lama dari database jika tidak upload gambar baru
+    const [product] = await Product.getProductById(id);
+    image = product[0]?.image_url || "";
+  }
   try {
-    // Memperbarui produk dengan data yang baru
-    await Product.updateProduct(id, name, price, stock, image, description, category);
+    await Product.updateProduct(
+      id,
+      name,
+      price,
+      stock,
+      image,
+      description,
+      category
+    );
     res.status(200).json({ message: "Product updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to update product", error });
   }
 };
-

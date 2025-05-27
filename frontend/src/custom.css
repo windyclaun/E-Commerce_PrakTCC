@@ -106,6 +106,18 @@ textarea.textarea {
   border: 1px solid var(--accent) !important;
 }
 
+.input,
+.textarea,
+select.input {
+  color: var(--primary) !important;
+  background: #fffbe6 !important;
+  border: 1.5px solid #d4c9be !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 6px !important;
+}
+
 input.input:focus,
 textarea.textarea:focus {
   border-color: var(--primary) !important;

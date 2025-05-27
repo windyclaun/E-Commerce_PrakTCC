@@ -9,7 +9,6 @@ exports.getAllOrders = () => {
   );
 };
 
-
 exports.getOrderById = (id) => {
   return db.execute(
     "SELECT o.*, p.name as product_name, p.image_url FROM orders o LEFT JOIN products p ON o.product_id = p.id WHERE o.id = ?",
@@ -37,7 +36,7 @@ exports.deleteOrder = (id) => {
 
 exports.getOrdersByUserId = (user_id) => {
   return db.execute(
-    "SELECT o.*, p.name as product_name, p.image_url FROM orders o LEFT JOIN products p ON o.product_id = p.id WHERE o.user_id = ?",
+    "SELECT o.*, p.name as product_name, p.image_url FROM orders o LEFT JOIN products p ON o.product_id = p.id WHERE o.user_id = ? AND o.status = 'pending'",
     [user_id]
   );
 };
@@ -53,7 +52,6 @@ exports.getPendingOrdersByUserId = (userId) => {
   );
 };
 
-
 exports.checkoutAllOrdersByUserId = (userId) => {
   if (!userId) {
     throw new Error("User ID is missing");
@@ -66,15 +64,33 @@ exports.checkoutAllOrdersByUserId = (userId) => {
 };
 
 exports.getOrderByIdAndUserId = (orderId, userId) => {
-  return db.execute(
-    "SELECT * FROM orders WHERE id = ? AND user_id = ?",
-    [orderId, userId]
-  );
+  return db.execute("SELECT * FROM orders WHERE id = ? AND user_id = ?", [
+    orderId,
+    userId,
+  ]);
 };
 
 exports.checkoutOrderById = (orderId) => {
+  return db.execute("UPDATE orders SET status = 'checked_out' WHERE id = ?", [
+    orderId,
+  ]);
+};
+
+exports.findPendingOrderByUserAndProduct = (user_id, product_id) => {
   return db.execute(
-    "UPDATE orders SET status = 'checked_out' WHERE id = ?",
-    [orderId]
+    "SELECT * FROM orders WHERE user_id = ? AND product_id = ? AND status = 'pending'",
+    [user_id, product_id]
+  );
+};
+
+// Ambil harga produk by id
+exports.getProductById = (product_id) => {
+  return db.execute("SELECT price FROM products WHERE id = ?", [product_id]);
+};
+
+exports.getCheckedOutOrdersByUserId = (user_id) => {
+  return db.execute(
+    "SELECT o.*, p.name as product_name, p.image_url FROM orders o LEFT JOIN products p ON o.product_id = p.id WHERE o.user_id = ? AND o.status = 'checked_out'",
+    [user_id]
   );
 };

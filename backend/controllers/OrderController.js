@@ -1,4 +1,5 @@
 const Order = require("../models/OrderModel");
+const Product = require("../models/ProductModel");
 
 exports.getAll = async (req, res) => {
   try {
@@ -19,8 +20,27 @@ exports.create = async (req, res) => {
   const { product_id, quantity, total_price } = req.body;
   const user_id = req.user.id; // ambil dari token
   try {
-    await Order.createOrder(user_id, product_id, quantity, total_price);
-    res.status(201).json({ message: "Order created" });
+    // Cek apakah order sudah ada
+    const [existing] = await Order.findPendingOrderByUserAndProduct(
+      user_id,
+      product_id
+    );
+    if (existing.length > 0) {
+      // Jika sudah ada, update quantity dan total_price
+      const order = existing[0];
+      // Hitung ulang total_price berdasarkan harga produk * quantity baru
+      // Ambil harga produk dari database (hindari penjumlahan total lama + total baru)
+      const [[productRow]] = await Order.getProductById(product_id);
+      const productPrice = productRow ? productRow.price : 0;
+      const newQty = order.quantity + quantity;
+      const newTotal = productPrice * newQty;
+      await Order.updateOrder(order.id, newQty, newTotal);
+      return res.status(200).json({ message: "Order updated" });
+    } else {
+      // Jika belum ada, insert baru
+      await Order.createOrder(user_id, product_id, quantity, total_price);
+      return res.status(201).json({ message: "Order created" });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -42,7 +62,6 @@ exports.update = async (req, res) => {
   }
 };
 
-
 exports.delete = async (req, res) => {
   const { id } = req.params;
   try {
@@ -57,6 +76,16 @@ exports.getByUserId = async (req, res) => {
   const { userId } = req.params;
   try {
     const [orders] = await Order.getOrdersByUserId(userId);
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getCheckedOutByUserId = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const [orders] = await Order.getCheckedOutOrdersByUserId(userId);
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -82,13 +111,30 @@ exports.checkoutAll = async (req, res) => {
 
     const total = orders.reduce((sum, order) => sum + order.total_price, 0);
 
+    // Cek stok produk sebelum checkout
+    for (const order of orders) {
+      const [[product]] = await Product.getProductById(order.product_id);
+      if (!product || product.stock < order.quantity) {
+        return res.status(400).json({
+          message: `Stok produk '${
+            product?.name || "Unknown"
+          }' tidak cukup untuk checkout (tersisa: ${
+            product?.stock || 0
+          }, diminta: ${order.quantity})`,
+        });
+      }
+    }
+    // Kurangi stok produk untuk setiap order yang di-checkout
+    for (const order of orders) {
+      await Product.reduceProductStock(order.product_id, order.quantity);
+    }
     await Order.checkoutAllOrdersByUserId(userId);
 
     res.json({
       message: "Checkout successful",
       total_price: total,
       total_items: orders.length,
-      orders
+      orders,
     });
   } catch (err) {
     console.error("Error:", err); // Log error untuk debugging
@@ -97,8 +143,8 @@ exports.checkoutAll = async (req, res) => {
 };
 
 exports.checkoutById = async (req, res) => {
-  const { id } = req.params;  // Ambil id order dari parameter
-  const userId = req.user?.id;  // Ambil userId dari token yang sudah terverifikasi
+  const { id } = req.params; // Ambil id order dari parameter
+  const userId = req.user?.id; // Ambil userId dari token yang sudah terverifikasi
 
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -109,23 +155,38 @@ exports.checkoutById = async (req, res) => {
     const [order] = await Order.getOrderByIdAndUserId(id, userId);
 
     if (!order.length) {
-      return res.status(404).json({ message: "Order not found or unauthorized" });
+      return res
+        .status(404)
+        .json({ message: "Order not found or unauthorized" });
     }
 
-    if (order[0].status !== 'pending') {
-      return res.status(400).json({ message: "Only pending orders can be checked out" });
+    if (order[0].status !== "pending") {
+      return res
+        .status(400)
+        .json({ message: "Only pending orders can be checked out" });
     }
 
+    // Cek stok produk sebelum checkout
+    const [[product]] = await Product.getProductById(order[0].product_id);
+    if (!product || product.stock < order[0].quantity) {
+      return res.status(400).json({
+        message: `Stok produk '${
+          product?.name || "Unknown"
+        }' tidak cukup untuk checkout (tersisa: ${
+          product?.stock || 0
+        }, diminta: ${order[0].quantity})`,
+      });
+    }
     // Update status order menjadi checked_out
     await Order.checkoutOrderById(id);
+    // Kurangi stok produk sesuai quantity order
+    await Product.reduceProductStock(order[0].product_id, order[0].quantity);
 
     res.json({
       message: "Order checked out successfully",
-      order: order[0]
+      order: order[0],
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
-

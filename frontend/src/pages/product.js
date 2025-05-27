@@ -1,6 +1,7 @@
 import axios from "axios";
 import Loading from "../components/loading";
 import BasePage from "./BasePage";
+import { useNavigate } from "react-router-dom";
 
 class Product extends BasePage {
   state = {
@@ -134,28 +135,67 @@ class Product extends BasePage {
     if (error) return <div className="notification is-danger">{error}</div>;
 
     return this.renderContainer(
-      <section className="section">
+      <div className="container is-widescreen">
         <div className="container">
           <h2 className="title has-text-link-dark has-text-centered">
             🌊 Daftar Produk
           </h2>
 
-          {/* Dropdown filter kategori */}
-          <div className="field">
-            <label className="label">Filter Kategori</label>
-            <div className="control">
-              <select
-                className="input"
-                value={selectedCategory}
-                onChange={this.handleCategoryChange}
-              >
-                <option value="">Pilih Kategori</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </option>
-                ))}
-              </select>
+          {/* Filter kategori di atas grid produk */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-start",
+              marginBottom: 18,
+            }}
+          >
+            <div
+              className="field has-addons"
+              style={{
+                borderRadius: 10,
+                boxShadow: "0 2px 8px #f1efec55",
+                padding: 8,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                minWidth: 0,
+                maxWidth: 200,
+                width: "100%",
+              }}
+            >
+              <p className="control" style={{ marginBottom: 0 }}>
+                <span className="icon is-small has-text-warning">
+                  <i className="fas fa-filter"></i>
+                </span>
+              </p>
+              <div className="control" style={{ flex: 1 }}>
+                <div
+                  className="select is-small is-warning"
+                  style={{ width: "100%" }}
+                >
+                  <select
+                    value={selectedCategory}
+                    onChange={this.handleCategoryChange}
+                    style={{
+                      color: "var(--primary)",
+                      background: "#fffbe6",
+                      border: "1.2px solid #d4c9be",
+                      fontWeight: 600,
+                      minWidth: 70,
+                      fontSize: 13,
+                      padding: "2px 4px",
+                      width: "100%",
+                    }}
+                  >
+                    <option value="">Semua Kategori</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category.charAt(0).toUpperCase() + category.slice(1)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -164,12 +204,13 @@ class Product extends BasePage {
             className="columns is-multiline is-mobile"
             style={{ marginLeft: -10, marginRight: -10 }}
           >
+            {/* Render produk */}
             {filteredProducts.length === 0 && (
               <div className="column is-12 has-text-centered has-text-grey">
                 Tidak ada produk.
               </div>
             )}
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product, idx) => (
               <div
                 key={product.id}
                 className="column is-one-quarter-desktop is-one-third-tablet is-half-mobile"
@@ -178,16 +219,31 @@ class Product extends BasePage {
                 <div
                   className="card"
                   style={{
-                    border: "none",
+                    border: "2px solid #ffe082",
                     borderRadius: 16,
-                    boxShadow: "0 4px 16px 0 rgba(122,178,211,0.10)",
-                    transition: "transform 0.2s",
+                    boxShadow: "0 6px 24px 0 rgba(255,224,130,0.13)",
+                    transition: "transform 0.2s, box-shadow 0.2s",
                     overflow: "hidden",
+                    background: "#fffde7",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "scale(1.03)";
+                    e.currentTarget.style.boxShadow =
+                      "0 12px 32px 0 rgba(255,224,130,0.18)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "none";
+                    e.currentTarget.style.boxShadow =
+                      "0 6px 24px 0 rgba(255,224,130,0.13)";
                   }}
                 >
                   <div
                     className="card-image has-text-centered"
-                    style={{ background: "var(--secondary-bg)", padding: 24 }}
+                    style={{
+                      background: "var(--secondary-bg)",
+                      padding: 24,
+                      position: "relative",
+                    }}
                   >
                     <figure
                       className="image is-128x128 is-inline-block"
@@ -203,6 +259,27 @@ class Product extends BasePage {
                         }}
                       />
                     </figure>
+                    {role === "admin" && (
+                      <span
+                        className="tag is-warning is-light"
+                        style={{
+                          position: "absolute",
+                          top: 10,
+                          right: 10,
+                          fontWeight: 700,
+                          fontSize: 12,
+                          letterSpacing: 1,
+                          borderRadius: 8,
+                          padding: "4px 10px",
+                        }}
+                      >
+                        <i
+                          className="fas fa-user-shield"
+                          style={{ marginRight: 5 }}
+                        ></i>
+                        Admin
+                      </span>
+                    )}
                   </div>
                   <div className="card-content" style={{ padding: 12 }}>
                     <p
@@ -239,21 +316,47 @@ class Product extends BasePage {
                     style={{
                       background: "var(--primary-bg)",
                       borderTop: "none",
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 0,
                     }}
                   >
                     {role === "admin" ? (
-                      <button
-                        className="card-footer-item button is-danger is-light"
-                        style={{
-                          borderRadius: 0,
-                          borderBottomLeftRadius: 16,
-                          borderBottomRightRadius: 16,
-                          fontWeight: 600,
-                        }}
-                        onClick={() => this.handleDeleteProduct(product.id)}
-                      >
-                        Hapus Produk
-                      </button>
+                      <>
+                        <button
+                          className="card-footer-item button is-danger is-light"
+                          style={{
+                            borderRadius: 0,
+                            borderBottomLeftRadius: 16,
+                            fontWeight: 700,
+                            color: "#c0392b",
+                            borderRight: "1px solid #ffe0b2",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                          onClick={() => this.handleDeleteProduct(product.id)}
+                        >
+                          <i className="fas fa-trash-alt"></i> Hapus
+                        </button>
+                        <button
+                          className="card-footer-item button is-warning is-light"
+                          style={{
+                            borderRadius: 0,
+                            borderBottomRightRadius: 16,
+                            fontWeight: 700,
+                            color: "#b26a00",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                          onClick={() =>
+                            this.props.navigate(`/edit-product/${product.id}`)
+                          }
+                        >
+                          <i className="fas fa-edit"></i> Edit
+                        </button>
+                      </>
                     ) : (
                       <button
                         className="card-footer-item button is-link is-light"
@@ -274,9 +377,14 @@ class Product extends BasePage {
             ))}
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 }
 
-export default Product;
+function ProductWithNavigate(props) {
+  const navigate = useNavigate();
+  return <Product {...props} navigate={navigate} />;
+}
+
+export default ProductWithNavigate;
