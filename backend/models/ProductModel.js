@@ -13,7 +13,7 @@ exports.createProduct = (
   price,
   stock,
   imageUrl,
-  description,
+  description,  
   category
 ) => {
   return db.execute(

@@ -3,21 +3,19 @@ const router = express.Router();
 const controller = require("../controllers/ProductController");
 const verifyToken = require("../middleware/VerifyToken");
 const multer = require("multer");
-const path = require("path"); // Pastikan path diimpor di sini
+const path = require("path");
+const { Storage } = require('@google-cloud/storage');
 
-// Konfigurasi multer (menyimpan file gambar)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Menyimpan file gambar di folder 'uploads'
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // Mengambil ekstensi file
-    cb(null, Date.now() + ext);
-  },
-});
-const upload = multer({ storage });
+// Initialize Google Cloud Storage
+const storage = new Storage();
+const bucketName = process.env.GCP_BUCKET_NAME;
+const bucket = storage.bucket(bucketName);
 
-// Menambahkan middleware untuk upload gambar
+// Multer configuration (for handling file uploads)
+const multerStorage = multer.memoryStorage(); // Store files in memory
+const upload = multer({ storage: multerStorage });
+
+// Product routes
 router.post("/", verifyToken, upload.single("image"), controller.create);
 router.put("/:id", verifyToken, upload.single("image"), controller.update);
 router.get("/", controller.getAll);
