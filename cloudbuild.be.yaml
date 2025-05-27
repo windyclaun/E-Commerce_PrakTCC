@@ -3,13 +3,8 @@ steps:
     args: ["cp", "${_ENV}", ".env"]  # Pastikan _ENV mengarah ke path yang benar
 
   - name: "gcr.io/cloud-builders/docker"
-    args:
-      - "build"
-      - "-t"
-      - "gcr.io/$PROJECT_ID/tcc-be-rest"
-      - "-f"
-      - "Dockerfile"  # Pastikan path ke Dockerfile sudah benar
-      - "."  # Gunakan direktori konteks yang sesuai
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/tcc-be-rest", "."]
+    dir: "backend"
 
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/$PROJECT_ID/tcc-be-rest"]
