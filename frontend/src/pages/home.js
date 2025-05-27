@@ -14,7 +14,7 @@ class Home extends BasePage {
 
   async componentDidMount() {
     try {
-      const res = await axios.get("/api/products");
+      const res = await axios.get("https://be-rest-1005441798389.us-central1.run.app/api/products");
       this.setState({ products: res.data, loading: false });
       this.carouselTimer = setInterval(() => this.nextCarousel("right"), 3500);
     } catch (err) {
