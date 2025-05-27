@@ -1,6 +1,6 @@
 steps:
   - name: "gcr.io/cloud-builders/gsutil"
-    args: ["cp", "${_ENV}/", ".env"]  # Pastikan _ENV mengarah ke path yang benar
+    args: ["cp", "${_ENV}", ".env"]  # Pastikan _ENV mengarah ke path yang benar
 
   - name: "gcr.io/cloud-builders/docker"
     args:
