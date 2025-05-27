@@ -8,7 +8,7 @@ const { Storage } = require('@google-cloud/storage');
 
 // Initialize Google Cloud Storage
 const storage = new Storage();
-const bucketName = process.env.GCP_BUCKET_NAME;
+const bucketName = "ecommerce-bucket-project";
 const bucket = storage.bucket(bucketName);
 
 // Multer configuration (for handling file uploads)
