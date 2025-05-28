@@ -8,8 +8,8 @@ const BASE_URL = "https://be-rest-1005441798389.us-central1.run.app/api";
 export const loginUser = (data) => axios.post(`${BASE_URL}/users/login`, data);
 export const registerUser = (data) =>
   axios.post(`${BASE_URL}/users/register`, data);
-export const getUserProfile = (token) =>
-  axios.get(`${BASE_URL}/users/profile`, {
+export const getUserProfile = (id, token) =>
+  axios.get(`${BASE_URL}/users/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 export const updateUserProfile = (data, token) =>

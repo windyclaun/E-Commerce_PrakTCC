@@ -25,7 +25,7 @@ function UserEdit() {
       return;
     }
     api
-      .getUserProfile(token)
+      .getUserProfile(userId, token)
       .then((res) => {
         setForm({ username: res.data.username, email: res.data.email });
         setLoading(false);
