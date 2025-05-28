@@ -1,5 +1,5 @@
 const Product = require("../models/ProductModel");
-const { Storage } = require('@google-cloud/storage');
+const { Storage } = require("@google-cloud/storage");
 const storage = new Storage();
 const bucketName = "ecommerce-bucket-project";
 const bucket = storage.bucket(bucketName);
@@ -15,14 +15,19 @@ exports.create = async (req, res) => {
   }
 
   // Menyusun nama file unik untuk file yang di-upload dan memastikan file tersimpan di dalam folder 'uploads/'
-  const blob = bucket.file(`uploads/${Date.now()}${path.extname(file.originalname)}`);
+  const blob = bucket.file(
+    `uploads/${Date.now()}${path.extname(file.originalname)}`
+  );
   const blobStream = blob.createWriteStream({
     resumable: false, // Tidak mengizinkan upload yang dapat dilanjutkan (untuk file kecil)
   });
 
   // Error handling saat proses upload gambar
   blobStream.on("error", (err) => {
-    return res.status(500).json({ message: "Error uploading file to GCP", error: err });
+    console.error("GCP UPLOAD ERROR:", err); // Tambahkan log error detail
+    return res
+      .status(500)
+      .json({ message: "Error uploading file to GCP", error: err });
   });
 
   // Setelah upload selesai
@@ -32,9 +37,17 @@ exports.create = async (req, res) => {
 
     try {
       // Menyimpan produk ke database dengan URL gambar
-      await Product.createProduct(name, price, stock, imageUrl, description, category);
+      await Product.createProduct(
+        name,
+        price,
+        stock,
+        imageUrl,
+        description,
+        category
+      );
       res.status(201).json({ message: "Product created successfully" });
     } catch (error) {
+      console.error("CREATE PRODUCT DB ERROR:", error); // Tambahkan log error detail
       res.status(500).json({ message: "Failed to create product", error });
     }
   });
@@ -47,12 +60,14 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const [products] = await Product.getAllProducts();
-    
+
     // Memastikan gambar diambil dari bucket GCP
-    const updatedProducts = products.map(product => {
+    const updatedProducts = products.map((product) => {
       if (product.image_url) {
         // Ubah path gambar menjadi URL yang valid di GCP
-        product.image_url = `https://storage.googleapis.com/${bucketName}/uploads/${path.basename(product.image_url)}`;
+        product.image_url = `https://storage.googleapis.com/${bucketName}/uploads/${path.basename(
+          product.image_url
+        )}`;
       }
       return product;
     });
@@ -76,7 +91,9 @@ exports.getById = async (req, res) => {
     const productData = product[0];
     if (productData.image_url) {
       // Ubah path gambar menjadi URL yang valid di GCP
-      productData.image_url = `https://storage.googleapis.com/${bucketName}/uploads/${path.basename(productData.image_url)}`;
+      productData.image_url = `https://storage.googleapis.com/${bucketName}/uploads/${path.basename(
+        productData.image_url
+      )}`;
     }
 
     res.json(productData);
@@ -101,7 +118,15 @@ exports.update = async (req, res) => {
   }
 
   try {
-    await Product.updateProduct(id, name, price, stock, image, description, category);
+    await Product.updateProduct(
+      id,
+      name,
+      price,
+      stock,
+      image,
+      description,
+      category
+    );
     res.status(200).json({ message: "Product updated successfully" });
   } catch (error) {
     res.status(500).json({ message: "Failed to update product", error });
