@@ -1,0 +1,11 @@
+service: frontend-service
+runtime: nodejs20
+env_variables:
+  NODE_ENV: 'production'
+instance_class: F2
+
+handlers:
+  - url: /static
+    static_dir: build/static
+  - url: /.*  
+    script: auto
