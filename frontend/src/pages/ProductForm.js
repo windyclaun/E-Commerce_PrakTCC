@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../api";
 import React from "react";
 
 class ProductForm extends React.Component {
@@ -52,18 +52,7 @@ class ProductForm extends React.Component {
       formData.append("category", category);
       formData.append("image", image);
 
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      await axios.post(
-        "https://be-rest-1005441798389.us-central1.run.app/api/products/add",
-        formData,
-        config
-      );
+      await api.addProduct(formData, token);
 
       // Animasi fade out sebelum reset/redirect
       document.body.classList.add("fade-page-exit-active");

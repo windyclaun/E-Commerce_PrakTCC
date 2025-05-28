@@ -1,5 +1,5 @@
+import api from "../api";
 import React from "react";
-import axios from "axios";
 
 function CheckoutHistory() {
   const [orders, setOrders] = React.useState([]);
@@ -16,9 +16,7 @@ function CheckoutHistory() {
           userId = payload && payload.id;
         }
         if (!userId) throw new Error("User tidak ditemukan");
-        const res = await axios.get(`/api/orders/user/${userId}/checkedout`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.getCheckedoutOrders(userId, token);
         setOrders(res.data);
         setLoading(false);
       } catch (err) {

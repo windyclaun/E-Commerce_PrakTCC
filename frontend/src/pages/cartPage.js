@@ -1,5 +1,5 @@
+import api from "../api";
 import React from "react";
-import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 
 class CartPage extends React.Component {
@@ -24,9 +24,7 @@ class CartPage extends React.Component {
         userId = payload && payload.id;
       }
       if (!userId) throw new Error("User tidak ditemukan");
-      const res = await axios.get(`/api/orders/user/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.getOrders(token);
       this.setState({
         orders: res.data,
         loading: false,
@@ -43,12 +41,10 @@ class CartPage extends React.Component {
       return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`/api/orders/${orderId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.deleteOrder(orderId, token);
       await this.fetchOrders();
     } catch (err) {
-      alert("Gagal menghapus order");
+      this.setState({ error: "Gagal menghapus item" });
     }
   };
 

@@ -1,5 +1,5 @@
+import api from "../api";
 import React from "react";
-import axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
 
 function CheckoutPage() {
@@ -16,12 +16,8 @@ function CheckoutPage() {
       const token = localStorage.getItem("token");
       // Checkout semua order yang dipilih
       await Promise.all(
-        selectedOrders.map((orderId) =>
-          axios.put(
-            `/api/orders/checkout/${orderId}`,
-            {},
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
+        selectedOrders.map(
+          (orderId) => api.checkoutOrder(orderId, token) // Tambahkan di api.js jika belum ada
         )
       );
       setSuccess(true);

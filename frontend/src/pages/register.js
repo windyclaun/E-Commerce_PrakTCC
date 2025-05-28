@@ -1,6 +1,6 @@
+import api from "../api";
 import React from "react";
 import BasePage from "./BasePage";
-import axios from "axios";
 import { Navigate } from "react-router-dom";
 
 class Register extends BasePage {
@@ -24,11 +24,11 @@ class Register extends BasePage {
     e.preventDefault();
     this.setState({ loading: true, error: null, success: null });
     try {
-      await axios.post("/api/users/register", {
+      await api.registerUser({
         username: this.state.username,
         password: this.state.password,
         email: this.state.email,
-        role: this.state.role, // Kirim role ke backend
+        role: this.state.role,
       });
       // Animasi fade out sebelum redirect ke login
       document.body.classList.add("fade-page-exit-active");

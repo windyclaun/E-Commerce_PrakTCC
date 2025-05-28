@@ -1,6 +1,6 @@
 import React from "react";
 import BasePage from "./BasePage";
-import axios from "axios";
+import api from "../api";
 
 const API_BASE = "https://be-rest-1005441798389.us-central1.run.app";
 
@@ -16,7 +16,7 @@ class Home extends BasePage {
 
   async componentDidMount() {
     try {
-      const res = await axios.get(`${API_BASE}/api/products`);
+      const res = await api.getAllProducts();
       let products = res.data;
       if (!Array.isArray(products)) products = [];
       this.setState({ products, loading: false });

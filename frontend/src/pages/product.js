@@ -1,9 +1,7 @@
-import axios from "axios";
+import api from "../api";
 import Loading from "../components/loading";
 import BasePage from "./BasePage";
 import { useNavigate } from "react-router-dom";
-
-const API_BASE = "https://be-rest-1005441798389.us-central1.run.app";
 
 class Product extends BasePage {
   state = {
@@ -35,7 +33,7 @@ class Product extends BasePage {
     } catch {}
     this.setState({ loading: true, role });
     try {
-      const res = await axios.get(`${API_BASE}/api/products`);
+      const res = await api.getAllProducts();
       let products = res.data;
       if (!Array.isArray(products)) products = [];
       this.setState({ products, filteredProducts: products, loading: false });
@@ -69,17 +67,7 @@ class Product extends BasePage {
       return;
     }
     try {
-      await axios.post(
-        `${API_BASE}/api/orders`,
-        {
-          product_id: product.id,
-          quantity: 1,
-          total_price: product.price,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.addToCart(product.id, 1, product.price, token);
       alert("Produk berhasil dimasukkan ke keranjang!");
     } catch (err) {
       alert("Gagal menambah ke keranjang");
@@ -90,11 +78,9 @@ class Product extends BasePage {
     if (!window.confirm("Yakin ingin menghapus produk ini?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`${API_BASE}/api/products/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.deleteProduct(productId, token);
       // Setelah hapus, refresh produk dari server
-      const res = await axios.get(`${API_BASE}/api/products`);
+      const res = await api.getAllProducts();
       let products = res.data;
       if (!Array.isArray(products)) products = [];
       this.setState({

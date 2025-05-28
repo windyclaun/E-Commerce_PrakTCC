@@ -1,5 +1,5 @@
+import api from "../api";
 import React from "react";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditProduct() {
@@ -13,9 +13,7 @@ function EditProduct() {
     const fetchProduct = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`/api/products/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await api.getProductById(id);
         setProduct(res.data);
         setLoading(false);
       } catch (err) {
@@ -34,9 +32,11 @@ function EditProduct() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`/api/products/${id}`, product, {
-        headers: { Authorization: `Bearer ${token}` },
+      const formData = new FormData();
+      Object.keys(product).forEach((key) => {
+        formData.append(key, product[key]);
       });
+      await api.updateProduct(id, formData, token);
       alert("Produk berhasil diupdate!");
       navigate("/products");
     } catch (err) {

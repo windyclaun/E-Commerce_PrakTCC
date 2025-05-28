@@ -1,5 +1,5 @@
+import api from "../api";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 function UserEdit() {
@@ -24,10 +24,8 @@ function UserEdit() {
       setLoading(false);
       return;
     }
-    axios
-      .get(`/api/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api
+      .getUserProfile(token)
       .then((res) => {
         setForm({ username: res.data.username, email: res.data.email });
         setLoading(false);
@@ -49,10 +47,9 @@ function UserEdit() {
     setSuccess(null);
     const token = localStorage.getItem("token");
     try {
-      await axios.put(
-        `/api/users/${userId}`,
+      await api.updateUserProfile(
         { username: form.username, email: form.email },
-        { headers: { Authorization: `Bearer ${token}` } }
+        token
       );
       // Ambil token lama, update username di payload, dan simpan ulang ke localStorage
       if (token) {
