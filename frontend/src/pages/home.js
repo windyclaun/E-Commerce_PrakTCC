@@ -2,6 +2,8 @@ import React from "react";
 import BasePage from "./BasePage";
 import axios from "axios";
 
+const API_BASE = "https://be-rest-1005441798389.us-central1.run.app";
+
 class Home extends BasePage {
   state = {
     carouselIndex: 0,
@@ -14,9 +16,7 @@ class Home extends BasePage {
 
   async componentDidMount() {
     try {
-      const res = await axios.get(
-        "https://be-rest-1005441798389.us-central1.run.app/api/products"
-      );
+      const res = await axios.get(`${API_BASE}/api/products`);
       let products = res.data;
       if (!Array.isArray(products)) products = [];
       this.setState({ products, loading: false });
