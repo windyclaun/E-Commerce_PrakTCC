@@ -43,7 +43,7 @@ exports.create = async (req, res) => {
   // Setelah upload selesai
   blobStream.on("finish", async () => {
     // Membuat URL gambar yang disimpan di Google Cloud Storage
-    const imageUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
+    const imageUrl = `https://storage.googleapis.com/${bucketName}/uploads/${blob.name}`;
 
     try {
       // Menyimpan produk ke database dengan URL gambar
