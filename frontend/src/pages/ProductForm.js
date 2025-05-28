@@ -20,7 +20,15 @@ class ProductForm extends React.Component {
 
   // Mengubah handleChange untuk file input
   handleFileChange = (e) => {
-    this.setState({ image: e.target.files[0] });
+    const file = e.target.files[0];
+    if (file && !["image/jpeg", "image/jpg"].includes(file.type)) {
+      this.setState({
+        error: "File harus berupa gambar JPG/JPEG",
+        image: null,
+      });
+      return;
+    }
+    this.setState({ image: file, error: null });
   };
 
   handleSubmit = async (e) => {
@@ -30,6 +38,11 @@ class ProductForm extends React.Component {
     const { name, price, stock, description, category, image } = this.state;
     const token = localStorage.getItem("token");
 
+    if (!image) {
+      this.setState({ error: "Gambar produk wajib diisi", loading: false });
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -37,17 +50,17 @@ class ProductForm extends React.Component {
       formData.append("stock", stock);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("image", image); // Menambahkan gambar ke FormData
+      formData.append("image", image);
 
       const config = {
         headers: {
-          "Content-Type": "multipart/form-data", // Mengatur header untuk upload file
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       };
 
       const response = await axios.post(
-        "https://be-rest-1005441798389.us-central1.run.app/api/products",
+        "https://be-rest-1005441798389.us-central1.run.app/api/products/add",
         formData,
         config
       );
@@ -58,15 +71,26 @@ class ProductForm extends React.Component {
         stock: "",
         description: "",
         category: "",
-        image: null, // Reset image setelah upload
+        image: null,
         loading: false,
         success: "Produk berhasil ditambahkan!",
       });
 
       if (this.props.onSuccess) this.props.onSuccess();
     } catch (err) {
+      let msg = "Gagal menambah produk";
+      if (err.response && err.response.data && err.response.data.message) {
+        msg = err.response.data.message;
+      } else if (err.response && err.response.data && err.response.data.error) {
+        msg =
+          typeof err.response.data.error === "string"
+            ? err.response.data.error
+            : JSON.stringify(err.response.data.error);
+      } else if (err.message) {
+        msg = err.message;
+      }
       this.setState({
-        error: err.response?.data?.error || "Gagal menambah produk",
+        error: msg,
         loading: false,
       });
     }
@@ -89,12 +113,12 @@ class ProductForm extends React.Component {
       <form onSubmit={this.handleSubmit} autoComplete="off">
         {error && (
           <div className="notification is-danger is-light is-size-7 mb-3">
-            {error}
+            {typeof error === "string" ? error : JSON.stringify(error)}
           </div>
         )}
         {success && (
           <div className="notification is-success is-light is-size-7 mb-3">
-            {success}
+            {typeof success === "string" ? success : JSON.stringify(success)}
           </div>
         )}
         <div className="field mb-3">

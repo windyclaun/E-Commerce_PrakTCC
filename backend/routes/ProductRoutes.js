@@ -16,7 +16,7 @@ const multerStorage = multer.memoryStorage(); // Store files in memory
 const upload = multer({ storage: multerStorage });
 
 // Product routes
-router.post("/", verifyToken, upload.single("image"), controller.create);
+router.post("/add", verifyToken, upload.single("image"), controller.create);
 router.put("/:id", verifyToken, upload.single("image"), controller.update);
 router.get("/", controller.getAll);
 router.get("/:id", controller.getById);
