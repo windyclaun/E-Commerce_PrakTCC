@@ -14,6 +14,11 @@ exports.create = async (req, res) => {
     return res.status(400).json({ message: "No image file provided." });
   }
 
+  // Validasi field wajib
+  if (!name || !price || !stock || !description || !category) {
+    return res.status(400).json({ message: "All fields are required." });
+  }
+
   // Menyusun nama file unik untuk file yang di-upload dan memastikan file tersimpan di dalam folder 'uploads/'
   const blob = bucket.file(
     `uploads/${Date.now()}${path.extname(file.originalname)}`
@@ -25,15 +30,20 @@ exports.create = async (req, res) => {
   // Error handling saat proses upload gambar
   blobStream.on("error", (err) => {
     console.error("GCP UPLOAD ERROR:", err); // Tambahkan log error detail
-    return res
-      .status(500)
-      .json({ message: "Error uploading file to GCP", error: err });
+    if (!res.headersSent) {
+      return res
+        .status(500)
+        .json({
+          message: "Error uploading file to GCP",
+          error: err.message || err,
+        });
+    }
   });
 
   // Setelah upload selesai
   blobStream.on("finish", async () => {
     // Membuat URL gambar yang disimpan di Google Cloud Storage
-    const imageUrl = `https://storage.googleapis.com/${bucketName}/uploads/${blob.name}`;
+    const imageUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
 
     try {
       // Menyimpan produk ke database dengan URL gambar
@@ -48,7 +58,14 @@ exports.create = async (req, res) => {
       res.status(201).json({ message: "Product created successfully" });
     } catch (error) {
       console.error("CREATE PRODUCT DB ERROR:", error); // Tambahkan log error detail
-      res.status(500).json({ message: "Failed to create product", error });
+      if (!res.headersSent) {
+        res
+          .status(500)
+          .json({
+            message: "Failed to create product",
+            error: error.message || error,
+          });
+      }
     }
   });
 
