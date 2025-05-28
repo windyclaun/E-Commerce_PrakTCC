@@ -31,19 +31,17 @@ exports.create = async (req, res) => {
   blobStream.on("error", (err) => {
     console.error("GCP UPLOAD ERROR:", err); // Tambahkan log error detail
     if (!res.headersSent) {
-      return res
-        .status(500)
-        .json({
-          message: "Error uploading file to GCP",
-          error: err.message || err,
-        });
+      return res.status(500).json({
+        message: "Error uploading file to GCP",
+        error: err.message || err,
+      });
     }
   });
 
   // Setelah upload selesai
   blobStream.on("finish", async () => {
     // Membuat URL gambar yang disimpan di Google Cloud Storage
-    const imageUrl = `https://storage.googleapis.com/${bucketName}/uploads/${blob.name}`;
+    const imageUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
 
     try {
       // Menyimpan produk ke database dengan URL gambar
@@ -59,12 +57,10 @@ exports.create = async (req, res) => {
     } catch (error) {
       console.error("CREATE PRODUCT DB ERROR:", error); // Tambahkan log error detail
       if (!res.headersSent) {
-        res
-          .status(500)
-          .json({
-            message: "Failed to create product",
-            error: error.message || error,
-          });
+        res.status(500).json({
+          message: "Failed to create product",
+          error: error.message || error,
+        });
       }
     }
   });

@@ -59,24 +59,31 @@ class ProductForm extends React.Component {
         },
       };
 
-      const response = await axios.post(
+      await axios.post(
         "https://be-rest-1005441798389.us-central1.run.app/api/products/add",
         formData,
         config
       );
 
-      this.setState({
-        name: "",
-        price: "",
-        stock: "",
-        description: "",
-        category: "",
-        image: null,
-        loading: false,
-        success: "Produk berhasil ditambahkan!",
-      });
-
-      if (this.props.onSuccess) this.props.onSuccess();
+      // Animasi fade out sebelum reset/redirect
+      document.body.classList.add("fade-page-exit-active");
+      setTimeout(() => {
+        this.setState({
+          name: "",
+          price: "",
+          stock: "",
+          description: "",
+          category: "",
+          image: null,
+          loading: false,
+          success: "Produk berhasil ditambahkan!",
+          error: null,
+        });
+        if (this.props.onSuccess) this.props.onSuccess();
+        if (this.props.redirect) {
+          window.location.href = this.props.redirect;
+        }
+      }, 400);
     } catch (err) {
       let msg = "Gagal menambah produk";
       if (err.response && err.response.data && err.response.data.message) {
