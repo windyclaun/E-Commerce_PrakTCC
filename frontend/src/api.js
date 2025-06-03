@@ -12,8 +12,8 @@ export const getUserProfile = (id, token) =>
   axios.get(`${BASE_URL}/users/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-export const updateUserProfile = (data, token) =>
-  axios.put(`${BASE_URL}/users/profile`, data, {
+export const updateUserProfile = (data, token, id) =>
+  axios.put(`${BASE_URL}/users/${id}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

@@ -47,10 +47,7 @@ function UserEdit() {
     setSuccess(null);
     const token = localStorage.getItem("token");
     try {
-      await api.updateUserProfile(
-        { username: form.username, email: form.email },
-        token
-      );
+      await api.updateUserProfile(form, token, userId);
       // Ambil token lama, update username di payload, dan simpan ulang ke localStorage
       if (token) {
         const parts = token.split(".");
