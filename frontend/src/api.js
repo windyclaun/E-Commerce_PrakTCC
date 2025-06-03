@@ -54,8 +54,8 @@ export const getOrderById = (id, token) =>
   });
 
 // CART (opsional, jika ada endpoint khusus)
-// export const getCart = (token) => axios.get(`${BASE_URL}/cart`, { headers: { Authorization: `Bearer ${token}` } });
-// export const addToCart = (data, token) => axios.post(`${BASE_URL}/cart`, data, { headers: { Authorization: `Bearer ${token}` } });
+export const getCart = (token) => axios.get(`${BASE_URL}/cart`, { headers: { Authorization: `Bearer ${token}` } });
+export const addToCart = (data, token) => axios.post(`${BASE_URL}/cart`, data, { headers: { Authorization: `Bearer ${token}` } });
 
 export default {
   loginUser,
@@ -70,6 +70,6 @@ export default {
   createOrder,
   getOrders,
   getOrderById,
-  // getCart,
-  // addToCart,
+  getCart,
+  addToCart,
 };
