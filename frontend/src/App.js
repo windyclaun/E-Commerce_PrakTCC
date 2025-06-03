@@ -19,8 +19,8 @@ import CheckoutPage from "./pages/checkout";
 import CheckoutHistory from "./pages/checkoutHistory";
 import EditProduct from "./pages/EditProduct";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "./custom.css"; // Importing custom CSS
-import "./fade-page.css"; // Import CSS for page transition effects
+import "./custom.css";
+import "./fade-page.css";
 
 function AppRoutes() {
   const location = useLocation();
