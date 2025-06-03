@@ -135,282 +135,287 @@ class Product extends BasePage {
     if (error) return <div className="notification is-danger">{error}</div>;
 
     return this.renderContainer(
-      <div className="container is-widescreen">
-        <div className="container">
-          <h2 className="title has-text-link-dark has-text-centered">
-            🌊 Daftar Produk
-          </h2>
+      <div className="container is-widescreen" style={{ marginTop: 32, marginBottom: 32 }}>
+      <div className="container" style={{ marginTop: 16, marginBottom: 16 }}>
+      <h2
+        className="title has-text-link-dark has-text-centered"
+        style={{ marginBottom: 28, fontSize: 35 }}
+      >
+        - Daftar Produk -
+      </h2>
 
-          {/* Filter kategori di atas grid produk */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-start",
-              marginBottom: 18,
-            }}
-          >
-            <div
-              className="field has-addons"
-              style={{
-                borderRadius: 10,
-                boxShadow: "0 2px 8px #f1efec55",
-                padding: 8,
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                minWidth: 0,
-                maxWidth: 200,
-                width: "100%",
-              }}
-            >
-              <p className="control" style={{ marginBottom: 0 }}>
-                <span className="icon is-small has-text-warning">
-                  <i className="fas fa-filter"></i>
-                </span>
-              </p>
-              <div className="control" style={{ flex: 1 }}>
-                <div
-                  className="select is-small is-warning"
-                  style={{ width: "100%" }}
-                >
-                  <select
-                    value={selectedCategory}
-                    onChange={this.handleCategoryChange}
-                    style={{
-                      color: "var(--primary)",
-                      background: "#fffbe6",
-                      border: "1.2px solid #d4c9be",
-                      fontWeight: 600,
-                      minWidth: 70,
-                      fontSize: 13,
-                      padding: "2px 4px",
-                      width: "100%",
-                    }}
-                  >
-                    <option value="">Semua Kategori</option>
-                    {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Tampilkan produk yang sudah difilter */}
-          <div
-            className="columns is-multiline is-mobile"
-            style={{
-              marginLeft: -10,
-              marginRight: -10,
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "stretch",
-              gap: 24, // Tambahkan gap antar card
-            }}
-          >
-            {/* Render produk */}
-            {filteredProducts.length === 0 && (
-              <div className="column is-12 has-text-centered has-text-grey">
-                Tidak ada produk.
-              </div>
-            )}
-            {filteredProducts.map((product, idx) => (
-              <div
-                key={product.id}
-                className="column is-one-quarter-desktop is-one-quarter-widescreen is-one-third-tablet is-half-mobile"
-                style={{
-                  marginBottom: 0, // gap sudah diatur di parent
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  padding: 0,
-                  flex: "0 0 25%", // 4 kolom di desktop
-                  maxWidth: "25%", // 4 kolom di desktop
-                }}
-              >
-                <div
-                  className="card"
-                  style={{
-                    border: "2px solid #ffe082",
-                    borderRadius: 16,
-                    boxShadow: "0 6px 24px 0 rgba(255,224,130,0.13)",
-                    transition: "transform 0.2s, box-shadow 0.2s",
-                    overflow: "hidden",
-                    background: "#fffde7",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    minHeight: 410,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "scale(1.03)";
-                    e.currentTarget.style.boxShadow =
-                      "0 12px 32px 0 rgba(255,224,130,0.18)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow =
-                      "0 6px 24px 0 rgba(255,224,130,0.13)";
-                  }}
-                >
-                  <div
-                    className="card-image has-text-centered"
-                    style={{
-                      background: "var(--secondary-bg)",
-                      padding: 24,
-                      position: "relative",
-                    }}
-                  >
-                    <figure
-                      className="image is-128x128 is-inline-block"
-                      style={{ margin: 0 }}
-                    >
-                      <img
-                        src={product.image_url || "/logo192.png"}
-                        alt={product.name}
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: 12,
-                          boxShadow: "0 2px 8px 0 rgba(74,98,138,0.08)",
-                        }}
-                      />
-                    </figure>
-                    {role === "admin" && (
-                      <span
-                        className="tag is-warning is-light"
-                        style={{
-                          position: "absolute",
-                          top: 10,
-                          right: 10,
-                          fontWeight: 700,
-                          fontSize: 12,
-                          letterSpacing: 1,
-                          borderRadius: 8,
-                          padding: "4px 10px",
-                        }}
-                      >
-                        <i
-                          className="fas fa-user-shield"
-                          style={{ marginRight: 5 }}
-                        ></i>
-                        Admin
-                      </span>
-                    )}
-                  </div>
-                  <div
-                    className="card-content"
-                    style={{
-                      padding: 12,
-                      flex: 1,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
-                      minHeight: 120,
-                    }}
-                  >
-                    <p
-                      className="title is-5"
-                      style={{
-                        color: "var(--primary)",
-                        fontWeight: 600,
-                        marginBottom: 2,
-                        fontSize: 13,
-                      }}
-                    >
-                      {product.name}
-                    </p>
-                    <p
-                      className="subtitle is-6"
-                      style={{
-                        color: "var(--accent)",
-                        fontWeight: 500,
-                        marginBottom: 6,
-                        fontSize: 12,
-                      }}
-                    >
-                      {new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                        minimumFractionDigits: 0,
-                      }).format(product.price || 0)}
-                    </p>
-                    <p
-                      className="has-text-grey"
-                      style={{ fontSize: 11, minHeight: 24 }}
-                    >
-                      {product.description}
-                    </p>
-                  </div>
-                  <footer
-                    className="card-footer"
-                    style={{
-                      background: "var(--primary-bg)",
-                      borderTop: "none",
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: 0,
-                      marginTop: "auto",
-                    }}
-                  >
-                    {role === "admin" ? (
-                      <>
-                        <button
-                          className="card-footer-item button is-danger is-light"
-                          style={{
-                            borderRadius: 0,
-                            borderBottomLeftRadius: 16,
-                            fontWeight: 700,
-                            color: "#c0392b",
-                            borderRight: "1px solid #ffe0b2",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                          }}
-                          onClick={() => this.handleDeleteProduct(product.id)}
-                        >
-                          <i className="fas fa-trash-alt"></i> Hapus
-                        </button>
-                        <button
-                          className="card-footer-item button is-warning is-light"
-                          style={{
-                            borderRadius: 0,
-                            borderBottomRightRadius: 16,
-                            fontWeight: 700,
-                            color: "#b26a00",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 6,
-                          }}
-                          onClick={() =>
-                            this.props.navigate(`/edit-product/${product.id}`)
-                          }
-                        >
-                          <i className="fas fa-edit"></i> Edit
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        className="card-footer-item button is-link is-light"
-                        style={{
-                          borderRadius: 0,
-                          borderBottomLeftRadius: 16,
-                          borderBottomRightRadius: 16,
-                          fontWeight: 600,
-                        }}
-                        onClick={() => this.handleAddToCart(product)}
-                      >
-                        Tambah ke Keranjang
-                      </button>
-                    )}
-                  </footer>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Filter kategori di kanan atas grid produk */}
+      <div
+      style={{
+        display: "flex",
+        justifyContent: "flex-end",
+        marginBottom: 18,
+      }}
+      >
+      <div
+        className="field has-addons"
+        style={{
+        borderRadius: 10,
+        boxShadow: "0 2px 8px #f1efec55",
+        padding: 8,
+        display: "flex",
+        alignItems: "center",
+        gap: 6,
+        minWidth: 0,
+        maxWidth: 200,
+        width: "100%",
+        }}
+      >
+        <p className="control" style={{ marginBottom: 0 }}>
+        <span className="icon is-small has-text-warning">
+        <i className="fas fa-filter"></i>
+        </span>
+        </p>
+        <div className="control" style={{ flex: 1 }}>
+        <div
+        className="select is-small is-warning"
+        style={{ width: "100%" }}
+        >
+        <select
+        value={selectedCategory}
+        onChange={this.handleCategoryChange}
+        style={{
+          color: "var(--primary)",
+          background: "#fffbe6",
+          border: "1.2px solid #d4c9be",
+          fontWeight: 600,
+          minWidth: 70,
+          fontSize: 13,
+          padding: "2px 4px",
+          width: "100%",  
+        }}
+        >
+        <option value="">Semua Kategori</option>
+        {categories.map((category) => (
+          <option key={category} value={category}>
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+          </option>
+        ))}
+        </select>
         </div>
+        </div>
+      </div>
+      </div>
+
+      {/* Tampilkan produk yang sudah difilter */}
+      <div
+      className="columns is-multiline is-mobile"
+      style={{
+        marginLeft: -10,
+        marginRight: -10,
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "stretch",
+        gap: 24,
+        justifyContent: "center",
+      }}
+      >
+      {/* Render produk */}
+      {filteredProducts.length === 0 && (
+        <div className="column is-12 has-text-centered has-text-grey">
+        Tidak ada produk.
+        </div>
+      )}
+      {filteredProducts.map((product, idx) => (
+        <div
+        key={product.id}
+        className="column is-one-quarter-desktop is-one-quarter-widescreen is-one-third-tablet is-half-mobile"
+        style={{
+        marginBottom: 24,
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        padding: 0,
+        flex: "0 0 25%",
+        maxWidth: "25%",
+        }}
+        >
+        <div
+        className="card"
+        style={{
+        border: "2px solid rgb(0, 0, 0)",
+        borderRadius: 16,
+        boxShadow: "0 6px 24px 0 rgba(255,224,130,0.13)",
+        transition: "transform 0.2s, box-shadow 0.2s",
+        overflow: "hidden",
+        background: "#fffde7",
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        minHeight: 410,
+        margin: 0,
+        }}
+        onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "scale(1.03)";
+        e.currentTarget.style.boxShadow =
+          "0 12px 32px 0 rgba(255,224,130,0.18)";
+        }}
+        onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "none";
+        e.currentTarget.style.boxShadow =
+          "0 6px 24px 0 rgba(255,224,130,0.13)";
+        }}
+        >
+        <div
+        className="card-image has-text-centered"
+        style={{
+          background: "var(--secondary-bg)",
+          padding: 24,
+          position: "relative",
+        }}
+        >
+        <figure
+          className="image is-128x128 is-inline-block"
+          style={{ margin: 0 }}
+        >
+          <img
+          src={product.image_url || "/logo192.png"}
+          alt={product.name}
+          style={{
+          objectFit: "cover",
+          borderRadius: 12,
+          boxShadow: "0 2px 8px 0 rgba(74,98,138,0.08)",
+          }}
+          />
+        </figure>
+        {role === "admin" && (
+          <span
+          className="tag is-warning is-light"
+          style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          fontWeight: 700,
+          fontSize: 12,
+          letterSpacing: 1,
+          borderRadius: 8,
+          padding: "4px 10px",
+          }}
+          >
+          <i
+          className="fas fa-user-shield"
+          style={{ marginRight: 5 }}
+          ></i>
+          Admin
+          </span>
+        )}
+        </div>
+        <div
+        className="card-content"
+        style={{
+          padding: 12,
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          minHeight: 120,
+        }}
+        >
+        <p
+          className="title is-5"
+          style={{
+          color: "var(--primary)",
+          fontWeight: 600,
+          marginBottom: 2,
+          fontSize: 13,
+          }}
+        >
+          {product.name}
+        </p>
+        <p
+          className="subtitle is-6"
+          style={{
+          color: "var(--accent)",
+          fontWeight: 500,
+          marginBottom: 6,
+          fontSize: 12,
+          }}
+        >
+          {new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+          }).format(product.price || 0)}
+        </p>
+        <p
+          className="has-text-grey"
+          style={{ fontSize: 11, minHeight: 24 }}
+        >
+          {product.description}
+        </p>
+        </div>
+        <footer
+        className="card-footer"
+        style={{
+          background: "var(--primary)",
+          borderTop: "none",
+          display: "flex",
+          flexDirection: "row",
+          gap: 0,
+          marginTop: "auto",
+        }}
+        >
+        {role === "admin" ? (
+          <>
+          <button
+          className="card-footer-item button is-danger is-light"
+          style={{
+          borderRadius: 0,
+          borderBottomLeftRadius: 16,
+          fontWeight: 700,
+          color: "#c0392b",
+          borderRight: "1px solid rgb(0, 0, 0)",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          }}
+          onClick={() => this.handleDeleteProduct(product.id)}
+          >
+          <i className="fas fa-trash-alt"></i> Hapus
+          </button>
+          <button
+          className="card-footer-item button is-warning is-light"
+          style={{
+          borderRadius: 0,
+          borderBottomRightRadius: 16,
+          fontWeight: 700,
+          color: "#474E93",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          }}
+          onClick={() =>
+          this.props.navigate(`/edit-product/${product.id}`)
+          }
+          >
+          <i className="fas fa-edit"></i> Edit
+          </button>
+          </>
+        ) : (
+          <button
+          className="card-footer-item button is-link is-light"
+          style={{
+          borderRadius: 0,
+          borderBottomLeftRadius: 16,
+          borderBottomRightRadius: 16,
+          fontWeight: 600,
+          }}
+          onClick={() => this.handleAddToCart(product)}
+          >
+          Tambah ke Keranjang
+          </button>
+        )}
+        </footer>
+        </div>
+        </div>
+      ))}
+      </div>
+      </div>
       </div>
     );
   }

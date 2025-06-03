@@ -67,7 +67,7 @@ class Home extends BasePage {
                 letterSpacing: 1,
               }}
             >
-              🌊 Selamat Datang di MyStore!
+              Selamat Datang di MyStore!
             </h1>
             <p
               className="subtitle is-5"

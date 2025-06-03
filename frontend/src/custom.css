@@ -2,14 +2,14 @@ html,
 body,
 #root {
   height: 100%;
-  margin: 0;
-  padding: 0;
+  margin: 5;
+  padding: 5;
 }
 
 /* Custom color palette from https://colorhunt.co/palette/f1efecd4c9be123458030303 */
 :root {
-  --primary-bg: #f1efec;
-  --secondary-bg: #d4c9be;
+  --primary-bg: #ffffff;
+  --secondary-bg: #B6B09F;
   --primary: #123458;
   --accent: #030303;
   --white: #fff;
@@ -36,7 +36,7 @@ footer {
 .navbar,
 .navbar.is-fixed-top,
 .footer {
-  background: var(--primary) !important;
+  background: var(--accent) !important;
   color: var(--white) !important;
 }
 
@@ -69,7 +69,7 @@ footer {
 .box,
 .card,
 .dashboard-bg {
-  background: var(--white) !important;
+  background: var(--white);
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(18, 52, 88, 0.07);
 }

@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import { Component, useEffect, useRef, useState } from "react";
+import { FaUserCircle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import CartIcon from "./cartIcon";
-import { useState, useEffect, useRef } from "react";
-import { FaUserCircle } from "react-icons/fa";
 
 // Komponen Link aktif Bulma
 function NavLink({ to, children }) {
@@ -150,7 +149,7 @@ function NavbarContent() {
                     zIndex: 1000,
                     padding: 0,
                     borderRadius: 12,
-                    boxShadow: "0 8px 32px 0 rgba(74,98,138,0.18)",
+                    boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.18)",
                     background: "var(--primary-bg)",
                     border: "1px solid #e3eaf2",
                     animation: "fadeInDropdown 0.18s cubic-bezier(.4,2,.6,1)",
