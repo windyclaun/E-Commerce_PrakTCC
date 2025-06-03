@@ -16,6 +16,10 @@ export const updateUserProfile = (data, token, id) =>
   axios.put(`${BASE_URL}/users/${id}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const deleteUser = (id, token) =>
+  axios.delete(`${BASE_URL}/users/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
 // PRODUCT
 export const getAllProducts = () => axios.get(`${BASE_URL}/products`);
@@ -52,16 +56,44 @@ export const getOrderById = (id, token) =>
   axios.get(`${BASE_URL}/orders/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+export const checkoutOrder = (orderId, token) =>
+  axios.put(
+    `${BASE_URL}/orders/checkout/${orderId}`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+export const deleteOrder = (id, token) =>
+  axios.delete(`${BASE_URL}/orders/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+// Tambahkan fungsi untuk mengambil riwayat checkout user
+export const getCheckedoutOrders = (userId, token) =>
+  axios.get(`${BASE_URL}/orders/user/${userId}/checkedout`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+export const getPendingOrdersByUserId = (userId, token) =>
+  axios.get(`${BASE_URL}/orders/user/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
 // CART (opsional, jika ada endpoint khusus)
-export const getCart = (token) => axios.get(`${BASE_URL}/cart`, { headers: { Authorization: `Bearer ${token}` } });
-export const addToCart = (data, token) => axios.post(`${BASE_URL}/cart`, data, { headers: { Authorization: `Bearer ${token}` } });
+export const getCart = (token) =>
+  axios.get(`${BASE_URL}/orders`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+export const addToCart = (data, token) =>
+  axios.post(`${BASE_URL}/orders`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
 export default {
   loginUser,
   registerUser,
   getUserProfile,
   updateUserProfile,
+  deleteUser,
   getAllProducts,
   getProductById,
   addProduct,
@@ -70,6 +102,10 @@ export default {
   createOrder,
   getOrders,
   getOrderById,
+  checkoutOrder,
   getCart,
   addToCart,
+  deleteOrder,
+  getCheckedoutOrders,
+  getPendingOrdersByUserId,
 };

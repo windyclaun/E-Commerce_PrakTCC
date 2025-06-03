@@ -15,14 +15,41 @@ function CheckoutPage() {
     try {
       const token = localStorage.getItem("token");
       // Checkout semua order yang dipilih
+      // Filter hanya order dengan status 'pending' dan milik user
+      let userId = null;
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          userId = payload && payload.id;
+        } catch {}
+      }
+      const pendingOrderIds = selectedOrderDetails
+        .filter((o) => o.status === "pending" && o.user_id === userId)
+        .map((o) => o.id);
+      if (pendingOrderIds.length === 0) {
+        setError(
+          "Tidak ada order dengan status 'pending' milik Anda yang bisa di-checkout."
+        );
+        setLoading(false);
+        return;
+      }
       await Promise.all(
-        selectedOrders.map(
-          (orderId) => api.checkoutOrder(orderId, token) // Tambahkan di api.js jika belum ada
-        )
+        pendingOrderIds.map((orderId) => api.checkoutOrder(orderId, token))
       );
       setSuccess(true);
     } catch (err) {
-      setError("Checkout gagal. Silakan coba lagi.");
+      let msg = "Checkout gagal. Silakan coba lagi.";
+      if (err.response && err.response.data) {
+        if (err.response.data.message) {
+          msg = err.response.data.message;
+        } else if (err.response.data.error) {
+          msg =
+            typeof err.response.data.error === "string"
+              ? err.response.data.error
+              : JSON.stringify(err.response.data.error);
+        }
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -89,7 +116,11 @@ function CheckoutPage() {
                     fontSize: 14,
                   }}
                 >
-                  Rp {order.total_price?.toLocaleString("id-ID")}
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                  }).format(order.total_price || 0)}
                 </div>
                 <div style={{ color: "#888", fontSize: 13 }}>
                   x{order.quantity}
@@ -100,7 +131,12 @@ function CheckoutPage() {
         </ul>
         <div className="mt-4 mb-4 has-text-right">
           <span className="is-size-5 has-text-weight-bold">
-            Total: Rp {total.toLocaleString("id-ID")}
+            Total:{" "}
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+              minimumFractionDigits: 0,
+            }).format(total)}
           </span>
         </div>
         <div className="has-text-right">

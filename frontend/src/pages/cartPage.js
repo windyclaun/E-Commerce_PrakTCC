@@ -24,7 +24,8 @@ class CartPage extends React.Component {
         userId = payload && payload.id;
       }
       if (!userId) throw new Error("User tidak ditemukan");
-      const res = await api.getOrders(token);
+      // Ambil hanya order dengan status 'pending' milik user
+      const res = await api.getPendingOrdersByUserId(userId, token);
       this.setState({
         orders: res.data,
         loading: false,
@@ -139,7 +140,11 @@ class CartPage extends React.Component {
                           fontSize: 14,
                         }}
                       >
-                        Rp {order.total_price?.toLocaleString("id-ID")}
+                        {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                          minimumFractionDigits: 0,
+                        }).format(order.total_price || 0)}
                       </div>
                       <div style={{ color: "#888", fontSize: 13 }}>
                         x{order.quantity}

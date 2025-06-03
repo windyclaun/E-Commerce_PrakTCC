@@ -67,7 +67,10 @@ class Product extends BasePage {
       return;
     }
     try {
-      await api.addToCart(product.id, 1, product.price, token);
+      await api.addToCart(
+        { product_id: product.id, quantity: 1, total_price: product.price },
+        token
+      );
       alert("Produk berhasil dimasukkan ke keranjang!");
     } catch (err) {
       alert("Gagal menambah ke keranjang");
@@ -96,14 +99,23 @@ class Product extends BasePage {
     } catch (err) {
       let msg = "Gagal menghapus produk";
       if (err.response && err.response.data && err.response.data.error) {
-        if (
-          err.response.data.error.includes("a foreign key constraint fails") ||
-          err.response.data.error.includes(
-            "Cannot delete or update a parent row"
-          )
-        ) {
-          msg =
-            "Tidak dapat menghapus produk karena masih ada order/transaksi yang menggunakan produk ini.";
+        if (typeof err.response.data.error === "string") {
+          if (
+            err.response.data.error.includes(
+              "a foreign key constraint fails"
+            ) ||
+            err.response.data.error.includes(
+              "Cannot delete or update a parent row"
+            )
+          ) {
+            msg =
+              "Tidak dapat menghapus produk karena masih ada order/transaksi yang menggunakan produk ini.";
+          }
+        } else if (err.response.data.error && err.response.data.error.message) {
+          // Jika error adalah object, ambil message-nya
+          msg = err.response.data.error.message;
+        } else {
+          msg = JSON.stringify(err.response.data.error);
         }
       }
       this.setState({ error: msg });
@@ -190,7 +202,14 @@ class Product extends BasePage {
           {/* Tampilkan produk yang sudah difilter */}
           <div
             className="columns is-multiline is-mobile"
-            style={{ marginLeft: -10, marginRight: -10 }}
+            style={{
+              marginLeft: -10,
+              marginRight: -10,
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "stretch",
+              gap: 24, // Tambahkan gap antar card
+            }}
           >
             {/* Render produk */}
             {filteredProducts.length === 0 && (
@@ -201,8 +220,16 @@ class Product extends BasePage {
             {filteredProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="column is-one-quarter-desktop is-one-third-tablet is-half-mobile"
-                style={{ marginBottom: 32 }}
+                className="column is-one-quarter-desktop is-one-quarter-widescreen is-one-third-tablet is-half-mobile"
+                style={{
+                  marginBottom: 0, // gap sudah diatur di parent
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
+                  padding: 0,
+                  flex: "0 0 25%", // 4 kolom di desktop
+                  maxWidth: "25%", // 4 kolom di desktop
+                }}
               >
                 <div
                   className="card"
@@ -213,6 +240,10 @@ class Product extends BasePage {
                     transition: "transform 0.2s, box-shadow 0.2s",
                     overflow: "hidden",
                     background: "#fffde7",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    minHeight: 410,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = "scale(1.03)";
@@ -269,7 +300,17 @@ class Product extends BasePage {
                       </span>
                     )}
                   </div>
-                  <div className="card-content" style={{ padding: 12 }}>
+                  <div
+                    className="card-content"
+                    style={{
+                      padding: 12,
+                      flex: 1,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      minHeight: 120,
+                    }}
+                  >
                     <p
                       className="title is-5"
                       style={{
@@ -290,7 +331,11 @@ class Product extends BasePage {
                         fontSize: 12,
                       }}
                     >
-                      Rp {product.price?.toLocaleString("id-ID")}
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        minimumFractionDigits: 0,
+                      }).format(product.price || 0)}
                     </p>
                     <p
                       className="has-text-grey"
@@ -307,6 +352,7 @@ class Product extends BasePage {
                       display: "flex",
                       flexDirection: "row",
                       gap: 0,
+                      marginTop: "auto",
                     }}
                   >
                     {role === "admin" ? (

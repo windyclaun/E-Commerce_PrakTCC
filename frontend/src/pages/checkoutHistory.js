@@ -86,7 +86,11 @@ function CheckoutHistory() {
                       fontSize: 14,
                     }}
                   >
-                    Rp {order.total_price?.toLocaleString("id-ID")}
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      minimumFractionDigits: 0,
+                    }).format(order.total_price || 0)}
                   </div>
                   <div style={{ color: "#888", fontSize: 13 }}>
                     x{order.quantity}
