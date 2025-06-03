@@ -253,8 +253,8 @@ Field sama seperti POST `/products/add`
 
 ```json
 {
-  "username": "rafi123",
-  "password": "secret123"
+  "username": "windy",
+  "password": "windy"
 }
 ```
 
@@ -272,10 +272,10 @@ Field sama seperti POST `/products/add`
 
 ```json
 {
-  "username": "rafi123",
-  "email": "rafi@mail.com",
-  "password": "secret123",
-  "role": "user"
+  "username": "windy",
+  "email": "windynapitupulu3108@gmail.com",
+  "password": "windy",
+  "role": "customer"
 }
 ```
 
@@ -294,9 +294,9 @@ Field sama seperti POST `/products/add`
 ```json
 {
   "id": 1,
-  "username": "rafi123",
-  "email": "rafi@mail.com",
-  "role": "user"
+  "username": "windy",
+  "email": "windynapitupulu3108@gmail.com",
+  "role": "customer"
 }
 ```
 
@@ -306,10 +306,10 @@ Field sama seperti POST `/products/add`
 
 ```json
 {
-  "username": "rafi456",
-  "email": "rafi456@mail.com",
-  "password": "newpassword",
-  "role": "user"
+  "username": "windy",
+  "email": "windynapitupulu3108@gmail.com",
+  "password": "windy",
+  "role": "customer"
 }
 ```
 
@@ -366,11 +366,10 @@ atau
 ```json
 {
   "id": 1,
-  "username": "rafi123",
-  "role": "user"
+  "username": "windy",
+  "role": "customer"
 }
 ```
 
 ---
 
-> Dokumentasi ini dapat digunakan untuk keperluan frontend, pengujian Postman, atau integrasi mobile Flutter.
