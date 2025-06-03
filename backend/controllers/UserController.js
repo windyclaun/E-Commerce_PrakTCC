@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
   {
     id: user[0].id,
     username: user[0].username,
-    email: user[0].email, // tambahkan ini
     role: user[0].role,
   },
   process.env.JWT_SECRET,
