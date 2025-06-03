@@ -1,14 +1,15 @@
 service: frontend-service
 runtime: nodejs20
-instance_class: F1
-
 handlers:
-  - url: /(.*\.(css|js|png|jpg|ico|json|svg|woff2?|txt|webp|ttf))
-    static_files: build/\1
-    upload: build/.*\.(css|js|png|jpg|ico|json|svg|woff2?|txt|webp|ttf)
-    secure: always
+  # Tangani file statis dengan tepat
+  - url: /static
+    static_dir: build/static
 
+  - url: /(.*\.(js|css|map|json|png|jpg|jpeg|gif|ico|svg|webp))
+    static_files: build/\1
+    upload: build/.*\.(js|css|map|json|png|jpg|jpeg|gif|ico|svg|webp)
+
+  # Fallback: semua route selain file → index.html (untuk React Router)
   - url: /.*
     static_files: build/index.html
     upload: build/index.html
-    secure: always
