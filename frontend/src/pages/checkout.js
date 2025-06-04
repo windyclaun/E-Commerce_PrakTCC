@@ -1,6 +1,6 @@
-import api from "../api";
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import api from "../api";
 
 function CheckoutPage() {
   const location = useLocation();
@@ -62,7 +62,7 @@ function CheckoutPage() {
     selectedOrders.includes(o.id)
   );
   const total = selectedOrderDetails.reduce(
-    (sum, o) => sum + (o.total_price || 0),
+    (sum, o) => sum + ((o.total_price || o.price || 0) * (o.quantity || 1)),
     0
   );
 
