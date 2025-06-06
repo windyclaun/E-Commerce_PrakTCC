@@ -2,7 +2,7 @@ import React from "react";
 import BasePage from "./BasePage";
 import api from "../api";
 
-const API_BASE = "https://be-rest-1005441798389.us-central1.run.app";
+const API_BASE = "https://be-rest-901699795850.us-central1.run.app";
 
 class Home extends BasePage {
   state = {

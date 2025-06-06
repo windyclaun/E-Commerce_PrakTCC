@@ -2,7 +2,7 @@
 // File ini berisi semua akses endpoint backend untuk frontend
 import axios from "axios";
 
-const BASE_URL = "https://be-rest-1005441798389.us-central1.run.app/api";
+const BASE_URL = "https://be-rest-901699795850.us-central1.run.app/api";
 
 // AUTH
 export const loginUser = (data) => axios.post(`${BASE_URL}/users/login`, data);
