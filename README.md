@@ -26,7 +26,7 @@ Aplikasi ini dibuat untuk memenuhi tugas praktek TCC, menyediakan platform e-com
 | Komponen         | Teknologi / Tools                                       |
 |------------------|----------------------------------------------------------|
 | Frontend         | JavaScript, HTML, CSS                                   |
-| Backend          | Node.js / Express (asumsi, atau bahasa lainnya jika berbeda) |
+| Backend          | Node.js                                                 |
 | Database         | MySQL (file SQL: `ecommerce_db.sql`)                    |
 | Deployment / Build | `cloudbuild.be.yaml` (untuk CI/CD)                     |
 | Archiver        | File-file frontend.zip dan backend.zip tersedia          |
